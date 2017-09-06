@@ -1,0 +1,19 @@
+
+/control/verbose  0
+/run/verbose 0
+/event/verbose    0
+/tracking/verbose 0
+/run/initialize
+
+/process/em/fluo true
+/process/em/auger true
+/process/em/pixe true
+
+
+/gps/particle alpha
+/gps/energy 5 MeV
+
+/gps/pos/type Beam
+/gps/position 0 0 16.25
+/gps/direction 0 0 -1
+

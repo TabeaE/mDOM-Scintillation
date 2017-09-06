@@ -1,0 +1,29 @@
+#include "mdomRunAction.hh"
+
+#include "G4Run.hh"
+#include "G4RunManager.hh"
+
+#include <ctime>
+#include <sys/time.h>
+
+#include "mdomAnalysisManager.hh"
+
+extern MdomAnalysisManager gAnalysisManager;
+
+mdomRunAction::mdomRunAction(){}
+mdomRunAction::~mdomRunAction(){}
+
+void mdomRunAction::BeginOfRunAction(const G4Run*)
+{
+// 	Open output data file
+   	gAnalysisManager.datafile.open("../ana/data.txt", std::ios::out|std::ios::out| std::ios_base::trunc);
+}
+
+void mdomRunAction::EndOfRunAction(const G4Run*)
+{
+// 	Close output data file
+  	gAnalysisManager.datafile.close();
+  	
+  	G4cout << "DEBUG: " << gAnalysisManager.hitStats.size() << G4endl;
+}
+

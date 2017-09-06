@@ -1,0 +1,70 @@
+#include "mdomSteppingAction.hh"
+
+#include "G4RunManager.hh"
+#include "G4SteppingManager.hh"
+#include "G4Step.hh"
+#include "G4ThreeVector.hh"
+
+#include "mdomAnalysisManager.hh"
+
+extern MdomAnalysisManager gAnalysisManager;
+
+mdomSteppingAction::mdomSteppingAction()
+{ 
+}
+
+void mdomSteppingAction::UserSteppingAction(const G4Step* aStep)
+{
+	G4Track* aTrack = aStep->GetTrack();
+	extern std::vector<G4int>	stats_PMT_hit;
+	extern std::vector<G4int>	stats_OM_hit;
+	extern G4long current_event_id;
+
+	std::vector<G4String> n;
+	extern std::vector<G4String> explode (G4String s, char d);
+	G4ThreeVector deltapos;
+
+	// Find position of decay
+	if ( aTrack->GetCreatorProcess() ) {
+		if ( aTrack->GetCreatorProcess()->GetProcessName() == "RadioactiveDecay" ) {
+			if ( ! gAnalysisManager.foundDecay ) {
+				gAnalysisManager.foundDecay = true;
+				gAnalysisManager.decayTheta = aTrack->GetVertexPosition().getTheta();
+				gAnalysisManager.decayPhi = aTrack->GetVertexPosition().getPhi();
+				gAnalysisManager.decayR = aTrack->GetVertexPosition().getR();
+			}
+		}
+	}
+
+	//reset global time
+	if ( aTrack->GetDefinition()->GetParticleName() == "e-" ) {
+	  G4cout << "DEBUG: " << aTrack->GetGlobalTime() << G4endl;
+	  G4cout << "DEBUG: " << aStep->GetPreStepPoint()->GetGlobalTime() << G4endl;
+	  G4cout << "DEBUG: " << aStep->GetPostStepPoint()->GetGlobalTime() << G4endl;
+	  aTrack->SetGlobalTime(0.0);
+	  aStep->GetPreStepPoint()->SetGlobalTime(0.0);
+	  aStep->GetPostStepPoint()->SetGlobalTime(0.0);
+	  G4cout << "DEBUG: " << aTrack->GetGlobalTime() << G4endl;
+	  G4cout << "DEBUG: " << aStep->GetPreStepPoint()->GetGlobalTime() << G4endl;
+	  G4cout << "DEBUG: " << aStep->GetPostStepPoint()->GetGlobalTime() << G4endl;
+	}
+
+	//	Check if optical photon is about to hit a photocathode, if so, destroy it and save the hit
+	if ( aTrack->GetDefinition()->GetParticleName() == "opticalphoton" ) {
+		if ( aTrack->GetTrackStatus() != fStopAndKill ) {
+			if ( aStep->GetPostStepPoint()->GetMaterial()->GetName() == "Photocathode" ) {
+ 				G4cout << "DEBUG: " << aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() << G4endl;
+				n = explode(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName(),'_');
+ 				G4cout << "DEBUG: " << n.at(1) << G4endl;
+ 				HitStat hitStat;
+ 				hitStat.pmtNr = atoi(n.at(1));
+				G4cout.precision(1) << "DEBUG: " <<  aTrack->GetGlobalTime() << G4endl;
+				G4cout << "DEBUG: " <<  aStep->GetPreStepPoint()->GetGlobalTime() << G4endl;
+				G4cout << "DEBUG: " <<  aStep->GetPostStepPoint()->GetGlobalTime() << G4endl;
+				hitStat.globaltime = aStep->GetPostStepPoint()->GetGlobalTime();
+ 				gAnalysisManager.hitStats.push_back(hitStat);
+				aTrack->SetTrackStatus(fStopAndKill);		// kills counted photon to prevent scattering and double-counting 
+			}
+		}
+	}
+}

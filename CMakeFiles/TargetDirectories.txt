@@ -1,0 +1,3 @@
+/home/m_unla02/Documents/geant4/MyGeant4/6/CMakeFiles/mdom_K40.dir
+/home/m_unla02/Documents/geant4/MyGeant4/6/CMakeFiles/mdom_scan_angular.dir
+/home/m_unla02/Documents/geant4/MyGeant4/6/CMakeFiles/mdom_scan_xyz.dir

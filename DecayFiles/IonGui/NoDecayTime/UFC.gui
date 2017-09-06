@@ -1,0 +1,18 @@
+/grdm/setRadioactiveDecayFile 81 207 ../DecayFiles/OriginalFiles/daughters/U235/z81.a207
+/grdm/setRadioactiveDecayFile 82 207 ../DecayFiles/OriginalFiles/daughters/U235/z82.a207
+/grdm/setRadioactiveDecayFile 82 211 ../DecayFiles/OriginalFiles/daughters/U235/z82.a211
+/grdm/setRadioactiveDecayFile 83 211 ../DecayFiles/OriginalFiles/daughters/U235/z83.a211
+/grdm/setRadioactiveDecayFile 84 211 ../DecayFiles/OriginalFiles/daughters/U235/z84.a211
+/grdm/setRadioactiveDecayFile 84 215 ../DecayFiles/OriginalFiles/daughters/U235/z84.a215
+/grdm/setRadioactiveDecayFile 86 219 ../DecayFiles/OriginalFiles/daughters/U235/z86.a219
+/grdm/setRadioactiveDecayFile 87 223 ../DecayFiles/OriginalFiles/daughters/U235/z87.a223
+/grdm/setRadioactiveDecayFile 88 223 ../DecayFiles/OriginalFiles/daughters/U235/z88.a223
+/grdm/setRadioactiveDecayFile 89 227 ../DecayFiles/OriginalFiles/daughters/U235/z89.a227
+/grdm/setRadioactiveDecayFile 90 227 ../DecayFiles/OriginalFiles/daughters/U235/z90.a227
+/grdm/setRadioactiveDecayFile 91 231 ../DecayFiles/OriginalFiles/daughters/U235/z91.a231
+/grdm/setRadioactiveDecayFile 90 231 ../DecayFiles/OriginalFiles/daughters/U235/z90.a231
+
+
+/grdm/setRadioactiveDecayFile 92 235 ../DecayFiles/z92.a235
+
+

@@ -1,0 +1,9 @@
+/grdm/setRadioactiveDecayFile 92 235 ../DecayFiles/OriginalFiles/z92.a235
+/grdm/setRadioactiveDecayFile 90 234 ../DecayFiles/OriginalFiles/z90.a234
+/grdm/setRadioactiveDecayFile 88 226 ../DecayFiles/OriginalFiles/z88.a226
+/grdm/setRadioactiveDecayFile 82 214 ../DecayFiles/OriginalFiles/z82.a214
+/grdm/setRadioactiveDecayFile 19 40 ../DecayFiles/OriginalFiles/z19.a40
+/grdm/setRadioactiveDecayFile 83 214 ../DecayFiles/OriginalFiles/z83.a214
+/grdm/setRadioactiveDecayFile 89 228 ../DecayFiles/OriginalFiles/z89.a228
+/grdm/setRadioactiveDecayFile 91 234 ../DecayFiles/z91.a234
+/gps/ion 91 234 0 73.920004

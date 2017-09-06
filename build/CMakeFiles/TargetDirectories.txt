@@ -1,0 +1,1 @@
+/data/Geant4 Folders/16PulseAmplitudeStruct/build/CMakeFiles/mdom_K40.dir

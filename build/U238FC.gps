@@ -1,0 +1,33 @@
+/control/execute ../DecayFiles/IonGui/NoDecayTime/U238FC.gui
+/control/verbose  0
+/run/verbose 0
+/event/verbose    0
+/tracking/verbose 0
+/run/initialize
+
+/process/em/fluo true
+/process/em/auger true
+/process/em/pixe true
+
+
+
+/gps/particle GenericIon
+/gps/ion 92 238 0
+
+
+/mdomDECAYcmd/fullChain 1
+
+
+/process/inactivate Cerenkov
+#/process/inactivate Scintillation
+
+/gps/energy 0
+/gps/pos/type Volume
+/gps/pos/shape Sphere
+/gps/pos/radius 210 mm
+
+/gps/ang/type iso
+/gps/pos/confine Glass_phys
+
+
+/random/setSeeds 1 2

@@ -1,0 +1,48 @@
+#ifndef mdomAnalysisManager_h
+#define mdomAnalysisManager_h 1
+
+#include "G4Types.hh"
+#include "G4String.hh"
+
+#include <vector>
+#include <fstream>
+
+struct HitStat {
+	G4int		pmtNr;
+	G4double	theta;
+	G4double	phi;
+        G4double        globaltime;
+};
+
+struct EvtStat {
+  G4int nrHitTot;//anzahl treffer insgesamt
+  G4int nrHitPMTs;//anzahl der getroffenen pmts
+  std::vector<std::pair<G4int,G4int> > hitsPMTs;//nr getroffener pmt und trefferanzahl
+};
+
+class MdomAnalysisManager
+{
+	public:
+		MdomAnalysisManager();
+		~MdomAnalysisManager();
+		void ResetEvent();
+		void AnalyzeEvent();
+		void Write();
+		
+		// event quantities
+		G4bool foundDecay;
+		G4double decayTheta;
+		G4double decayPhi;
+		G4double decayR;
+		std::vector<HitStat> hitStats;
+
+		// run quantities
+		G4String outputFilename;
+		std::fstream datafile;
+		std::vector<EvtStat> evtStats;
+	
+	private:
+	
+};
+
+#endif

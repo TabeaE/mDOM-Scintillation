@@ -1,0 +1,384 @@
+#include "mdomAnalysisManager.hh"
+#include "G4ios.hh"
+//since Geant4.10: include units manually
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
+MdomAnalysisManager::MdomAnalysisManager(){
+  }
+
+MdomAnalysisManager::~MdomAnalysisManager(){}
+
+
+void MdomAnalysisManager::ResetEvent()
+{	
+  foundDecay = false;
+  decayModus=4;
+  NrScintillation=0;
+  NrCerenkov=0;
+//energyDeposited=0;
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
+//----------------------------------------------------Quick Sort---------------------------------------------------
+//---------- We use this functions if we want to have an ordered output (eg. chronologically ordered)--------------
+  
+  
+// Function for the division and interchange for the ordering algorithm. The items of the vector "array" are sorted and all the "Narray#" are ordered along.
+int MdomAnalysisManager::divide(std::vector<G4double>& array, int start, int end, std::vector<G4double>& Narray1, std::vector<G4int>& Narray2, std::vector<G4double>& Narray3, std::vector<G4double>& Narray4, std::vector<G4double>& Narray5, std::vector<G4double>& Narray6, std::vector<G4int>& Narray7, std::vector<G4int>& Narray8) {
+  int left;
+  int right;
+  G4double pivot;
+  G4double temp;
+
+  pivot = array.at(start);
+  left = start;
+  right = end;
+
+
+  while (left < right) {
+    while (array.at(right) > pivot) {
+      right--;
+      }
+
+    while ((left < right) && (array.at(left) <= pivot)) {
+      left++;
+      }
+
+
+    if (left < right) {
+      temp = array.at(left);
+      array.at(left) = array.at(right);
+      array.at(right) = temp;
+
+      temp = Narray1.at(left);
+      Narray1.at(left) = Narray1.at(right);
+      Narray1.at(right) = temp;
+
+      temp = Narray2.at(left);
+      Narray2.at(left) = Narray2.at(right);
+      Narray2.at(right) = temp;
+
+      temp = Narray3.at(left);
+      Narray3.at(left) = Narray3.at(right);
+      Narray3.at(right) = temp;
+
+      temp = Narray4.at(left);
+      Narray4.at(left) = Narray4.at(right);
+      Narray4.at(right) = temp;
+
+      temp = Narray5.at(left);
+      Narray5.at(left) = Narray5.at(right);
+      Narray5.at(right) = temp;
+
+      temp = Narray6.at(left);
+      Narray6.at(left) = Narray6.at(right);
+      Narray6.at(right) = temp;
+
+      temp = Narray7.at(left);
+      Narray7.at(left) = Narray7.at(right);
+      Narray7.at(right) = temp;	
+
+      temp = Narray8.at(left);
+      Narray8.at(left) = Narray8.at(right);
+      Narray8.at(right) = temp;
+      }
+    }
+
+
+  temp = array.at(right);
+  array.at(right) = array.at(start);
+  array.at(start) = temp;
+
+  temp = Narray1.at(right);
+  Narray1.at(right) = Narray1.at(start);
+  Narray1.at(start) = temp;
+
+  temp = Narray2.at(right);
+  Narray2.at(right) = Narray2.at(start);
+  Narray2.at(start) = temp;
+
+  temp = Narray3.at(right);
+  Narray3.at(right) = Narray3.at(start);
+  Narray3.at(start) = temp;
+
+  temp = Narray4.at(right);
+  Narray4.at(right) = Narray4.at(start);
+  Narray4.at(start) = temp;
+
+  temp = Narray5.at(right);
+  Narray5.at(right) = Narray5.at(start);
+  Narray5.at(start) = temp;
+
+  temp = Narray6.at(right);
+  Narray6.at(right) = Narray6.at(start);
+  Narray6.at(start) = temp;
+
+  temp = Narray7.at(right);
+  Narray7.at(right) = Narray7.at(start);
+  Narray7.at(start) = temp;
+
+  temp = Narray8.at(right);
+  Narray8.at(right) = Narray8.at(start);
+  Narray8.at(start) = temp;
+
+
+  return right;
+  }
+
+// Ordering-function
+void MdomAnalysisManager::quicksort(std::vector<G4double>& array, int start, int end, std::vector<G4double>& Narray1, std::vector<G4int>& Narray2,  std::vector<G4double>& Narray3, std::vector<G4double>& Narray4, std::vector<G4double>& Narray5, std::vector<G4double>& Narray6, std::vector<G4int>& Narray7, std::vector<G4int>& Narray8)
+{
+  int pivot;
+
+  if (start < end) {
+    pivot = divide(array, start, end, Narray1, Narray2, Narray3, Narray4, Narray5, Narray6, Narray7, Narray8);
+
+    // Ordeno la lista de los menores
+    quicksort(array, start, pivot - 1, Narray1, Narray2, Narray3, Narray4, Narray5, Narray6, Narray7, Narray8);
+
+    // Ordeno la lista de los mayores
+    quicksort(array, pivot + 1, end, Narray1, Narray2, Narray3, Narray4, Narray5, Narray6, Narray7, Narray8);
+    }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
+
+
+
+// The function HitKiller will erase all hits that arrived to the PMT in the pulse-pileup-time given by the variable deadTime. 
+// It also erase 20% (given by the G4double "probability") of the individual hits (hits that do not have a "temporal neighbour") using the function triggerAcceptanceKiller.
+void MdomAnalysisManager::HitKiller(std::vector<G4double>& TimeVector, std::vector<G4bool>&  realHitVector, std::vector<G4int>& PMTVector, std::vector<G4String>& NucleusVector)
+{  NrAlone=0;
+  G4double deadTime= 4.5*ns;
+  for (int i = 0; i < (int) (TimeVector.size()-1); i++) {
+    for (int j = i+1; j < (int) TimeVector.size(); j++){
+      if ((PMTVector.at(i) == PMTVector.at(j)) && (NucleusVector.at(i) == NucleusVector.at(j))){
+	if ((TimeVector.at(j)-TimeVector.at(i))<deadTime){	
+   realHitVector.at(j)=false;
+   }
+	}
+
+      }
+    }
+  for (int i = 0; i < (int) TimeVector.size(); i++){
+    flag = false;
+    if (realHitVector.at(i) == true) {
+      if ( i <= (TimeVector.size()-2) ){
+	for (int j = i+1; j< (int) TimeVector.size(); j++){
+   if ((PMTVector.at(i) == PMTVector.at(j)) && (NucleusVector.at(i) == NucleusVector.at(j))){
+     if ((TimeVector.at(j)-TimeVector.at(i))<deadTime){
+       flag = true;
+       break;
+       }
+     }
+   }
+	if ( flag == false){      
+   NrAlone++;
+   realHitVector.at(i) = triggerAcceptanceKiller();
+   }
+	}
+      if ( i == (TimeVector.size()-1) ){
+	NrAlone++;
+	realHitVector.at(i) = triggerAcceptanceKiller();
+	}
+      }
+    }
+}
+
+bool MdomAnalysisManager::triggerAcceptanceKiller()
+{ G4double probability = 0.2;                               // Probability that the photon will not be registered.
+  G4double rand = G4UniformRand();
+  if (rand <= probability){
+    return false;
+    }
+  else{
+    return true;
+    }
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
+
+
+//This function makes a list of the mother nucleus that caused the hit.
+void MdomAnalysisManager::MotherFinder(int numberofHits, std::vector<G4int>& photonParentVector, std::vector<G4int>& parentParticlesIDVector, std::vector<G4int>& particlesIdVector, std::vector<G4String>& particlesNameVector, std::vector<G4String>& particlesTypeVector, std::vector<G4String>& definitiveNameVector)
+{ for (int i = 0; i < (int) numberofHits; i++) {
+
+  for (int j = 0; j < (int) particlesIdVector.size(); j++){
+    if (photonParentVector.at(i) == particlesIdVector.at(j)){
+      MOTHERFINDER2:
+      if((particlesTypeVector.at(j) != "nucleus")||(particlesNameVector.at(j) == "alpha"))
+      {
+	for(int k = 0; k < (int) particlesIdVector.size(); k++) 
+	{
+   if (particlesIdVector.at(k) == parentParticlesIDVector.at(j))
+   {
+     j=k;
+     goto MOTHERFINDER2;
+   }
+ }
+      }
+      else
+      {
+	definitiveNameVector.push_back(particlesNameVector.at(j));
+     break;
+      }
+
+      }
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
+// This function adds up the hits,  separating them by their creationProcess.
+void MdomAnalysisManager::HitsProcessCounter(G4int& CerenkovCounter, G4int& ScintCounter, std::vector<G4bool>& realHitVector, std::vector<G4String>& creationProcessVector, std::vector<G4int>& photonIdsVector, std::vector<G4int>& hitPhotonIDVector)
+{ for (int i = 0; i < (int) hitPhotonIDVector.size(); i++) {
+  if(realHitVector.at(i)==true){
+    for (int j = 0; j < (int) photonIdsVector.size(); j++){
+      if (hitPhotonIDVector.at(i) == photonIdsVector.at(j)) {
+	if (creationProcessVector.at(j)=="c"){
+   CerenkovCounter++;}
+	if (creationProcessVector.at(j)=="s"){
+   ScintCounter++;}
+   break;
+	}
+      }
+    }
+  }  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
+// This function runs all the functions above. 
+void MdomAnalysisManager::Analysis() {
+  totalC=0;
+  totalS=0;	
+  totalRC=0;
+  totalRS=0;	
+  quicksort(stats_hit_time, 0,stats_event_id.size()-1, stats_photon_flight_time, stats_PMT_hit, stats_photon_Xposition, stats_photon_Yposition, stats_photon_Zposition, stats_photon_energy, photonParent, hitPhotonID);
+  MotherFinder(stats_event_id.size(), photonParent, parentParticlesIDs, particlesIDs, particlesNames, particlesType, hitMotherName);
+  HitsProcessCounter(totalC, totalS, realHit, creationProcess, photonIds, hitPhotonID);
+  HitKiller(stats_hit_time, realHit, stats_PMT_hit, hitMotherName); 
+  HitsProcessCounter(totalRC, totalRS, realHit, creationProcess, photonIds, hitPhotonID);
+  }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
+
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
+// -------------------------------------------WRITE FUNCTIONS----------------------------------------------------
+void MdomAnalysisManager::WriteDetailPhotons()
+{           for (int i = 0; i < (int) stats_event_id.size(); i++) {
+  //datafile << "# event#     Name Mother Nucleus    hit time/ns  flight time/ns  track length/m  energy/eV PMT#  event distance/m  photon position[m]: x,y,z  direction: x,y,z r[m] ParentId"<<G4endl;		 
+  datafile << stats_event_id.at(i) << "\t";
+  //datafile << stats_mothername.at(i) << "\t";
+  datafile << stats_hit_time.at(i) << "\t";
+  //datafile << stats_photon_flight_time.at(i) << "\t";
+  //datafile << stats_photon_track_length.at(i) << "\t";
+  //datafile << stats_photon_energy.at(i) << "\t";
+  datafile << stats_PMT_hit.at(i) << "\t";
+  //datafile << stats_event_distance.at(i) << "\t";
+  //datafile << stats_photon_Xposition.at(i)/m << "\t";
+  //datafile << stats_photon_Yposition.at(i)/m << "\t";
+  //datafile << stats_photon_Zposition.at(i)/m << "\t";
+  //datafile << stats_photon_direction.at(i).x() << "\t";
+  //datafile << stats_photon_direction.at(i).y() << "\t";
+  //datafile << stats_photon_direction.at(i).z() << "\t";
+  //datafile << stats_photon_position.at(i).mag() / m ;
+  //datafile << photonParent.at(i) << "\t";
+  //datafile << hitMotherName.at(i) << "\t";
+  for (int j=0; j < (int) photonIds.size(); j++){
+    if (hitPhotonID.at(i) == photonIds.at(j)) {
+      //datafile <<  creationProcess.at(j);
+      break;
+      }
+    }
+  datafile << G4endl;
+  }
+
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
+void MdomAnalysisManager::WriteMotherDecay()
+{
+  //datafile << "# event#|	|MotherPos Theta	Phi	R|	|#Hits|	|#Cerenkov|	|#Scintillation|	|DecayModus|"<<G4endl;	
+  for (int i = 0; i < (int) NewMother_event_id.size(); i++) {
+
+    datafileMother << NewMother_event_id.at(i) << "\t";
+    datafileMother << decayTheta.at(i) << "\t" ;
+    datafileMother << decayPhi.at(i) << "\t" ;
+    datafileMother << decayR.at(i) << "\t" ;
+    datafileMother << NrCerenkovVec.at(i) << "\t" ;
+    datafileMother << NrScintillationVec.at(i);                //<< "\t" << decayModus;
+
+    datafileMother << G4endl;
+    }
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
+void MdomAnalysisManager::WriteAccept()
+{
+  int	pmthits[25] = {0};
+  int sum = 0;
+  //datafile << "# test header" << G4endl;
+
+
+  // repacking hits:
+  for (int i = 0; i < (int) stats_PMT_hit.size(); i++) {
+    if (realHit.at(i)) {
+      pmthits[stats_PMT_hit.at(i)] += 1;
+      }
+    }
+  // wrinting collective hits
+  for (int j = 0; j < 24; j++) {
+    //datafileTest << "\t" << pmthits[j];
+    if (pmthits[j]>0) {
+    sum += 1;
+    pmthits[j] = 0;
+    }
+    }
+  datafileTest << sum;                                     // << sum <<"\t"<< totalRC << "\t" << totalRS << "\t" << totalC<< "\t"  << totalS << "\t" << NrAlone  ;
+  datafileTest << G4endl;	
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
+
+
+// Erase all the data for the next event.
+void MdomAnalysisManager::Reset()
+{
+  stats_event_id.clear();
+  stats_photon_flight_time.clear();
+  //stats_photon_track_length.clear();
+  stats_hit_time.clear();
+  stats_photon_energy.clear();
+  stats_PMT_hit.clear();
+  //stats_photon_direction.clear(); //!
+  //stats_photon_position.clear();
+  stats_photon_Xposition.clear();
+  stats_photon_Yposition.clear();
+  stats_photon_Zposition.clear();
+
+  decayTheta.clear();
+  decayPhi.clear();
+  decayR.clear();
+  NrCerenkovVec.clear();
+  NrScintillationVec.clear();
+  photonParent.clear();
+
+  particlesNames.clear();
+  particlesIDs.clear();
+  parentParticlesIDs.clear();
+  particlesType.clear();
+  hitMotherName.clear();
+  realHit.clear();
+
+  hitPhotonID.clear();
+  photonIds.clear();
+  creationProcess.clear();
+
+  NewMother_event_id.clear();
+//stats_mothername.clear();
+
+}
