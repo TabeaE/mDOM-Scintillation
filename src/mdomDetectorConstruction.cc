@@ -50,6 +50,7 @@ extern G4double gworldsize;
 extern G4double gscintYield; 
 extern G4double gscintTimeConst;
 extern G4double gscintSpectrum;
+extern G4double gTemperature;
 
 extern std::vector<double> readColumnDouble (G4String fn, int col);
 extern std::vector<G4String> explode (G4String s, char d);
@@ -1881,6 +1882,65 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
     hc_eVnm / (599.4+gscintSpectrum)*eV
   };
   
+  G4double Temperature[5] = {
+    -15,
+    -25,
+    -35,
+    -45,
+    -50
+  };
+  
+  
+  
+  G4double FirstCompomentAmplitude[5] = {
+    7.44264474e-03,
+    7.09497579e-03,
+    6.88619615e-03,
+    6.71650386e-03,
+    6.26193414e-03 
+  };
+  
+    G4double SecondCompomentAmplitude[5] = {
+    3.72712597e-03,
+    3.44366607e-03,
+    3.22187477e-03,
+    2.79396418e-03,
+    3.11992762e-03
+  };
+  
+    G4double ThirdCompomentAmplitude[5] = {
+    9.37985502e-04,
+    8.57409419e-04,
+    7.53362142e-04,
+    6.70626881e-04,
+    7.18236379e-04 
+  };
+  
+    G4double FirstTime[5] = {
+    200.235250835*ns,
+    207.368858907*ns,
+    221.330366343*ns,
+    246.15527870*ns,
+    204.9615*ns 
+  };
+  
+    G4double SecondTime[5] = {
+    1543.61044827*ns,
+    1681.26113657*ns,
+    1806.1209032*ns,
+    1979.83710164*ns,
+    1647.6259*ns
+  };
+  
+    G4double ThirdTime[5] = {
+    11851.7691222*ns,
+    12832.1823583*ns,
+    14405.5681616*ns,
+    15307.2132678*ns,
+    14335.53*ns
+  };
+  
+  
   
   
   // ------------------------- choosing glass for simulation ------------------------------------
@@ -1895,20 +1955,35 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   //----------------_Scintillation-----------
   G4double scintYield=gscintYield/MeV;
   G4double sctintTimeConst = gscintTimeConst*ns;
-
-
+  G4double sTemperature = gTemperature;
+  G4int tempIndex;
+  if (sTemperature>-15 || sTemperature < -50){
+    G4cout << "Selected Temperature out of range. Data goes from -50C to -15C. Simulation will use default temperature -35C." << G4endl;
+    sTemperature = -35;
+  }
+  
+  for (int i = 0; i < sizeof(Temperature); ++i)
+  {
+    
+    if (Temperature[i] == sTemperature){
+      tempIndex = i;
+      
+    }
+    
+  };
+  
   proptable_VitrovexGlass->AddConstProperty("SCINTILLATIONYIELD",scintYield);
-  proptable_VitrovexGlass->AddConstProperty("FIRSTAMPLITUDE",2.);
-  proptable_VitrovexGlass->AddConstProperty("SECONDAMPLITUDE",0.);
-  proptable_VitrovexGlass->AddConstProperty("THIRDAMPLITUDE",0.);
+  proptable_VitrovexGlass->AddConstProperty("FIRSTAMPLITUDE",FirstCompomentAmplitude[tempIndex]);
+  proptable_VitrovexGlass->AddConstProperty("SECONDAMPLITUDE",SecondCompomentAmplitude[tempIndex]);
+  proptable_VitrovexGlass->AddConstProperty("THIRDAMPLITUDE",ThirdCompomentAmplitude[tempIndex]);
   
   proptable_VitrovexGlass->AddProperty("FIRSTCOMPONENT",Scnt_PP,Scnt_SLOW,32);
   proptable_VitrovexGlass->AddProperty("SECONDCOMPONENT",Scnt_PP,Scnt_SLOW,32);
   proptable_VitrovexGlass->AddProperty("THIRDCOMPONENT",Scnt_PP,Scnt_SLOW,32);
   
-  proptable_VitrovexGlass->AddConstProperty("FIRSTTIME",sctintTimeConst);
-  proptable_VitrovexGlass->AddConstProperty("SECONDTIME",450.*ns);
-  proptable_VitrovexGlass->AddConstProperty("THIRDTIME",3320.*ns);
+  proptable_VitrovexGlass->AddConstProperty("FIRSTTIME",FirstTime[tempIndex]);
+  proptable_VitrovexGlass->AddConstProperty("SECONDTIME",SecondTime[tempIndex]);
+  proptable_VitrovexGlass->AddConstProperty("THIRDTIME",ThirdTime[tempIndex]);
   
   proptable_VitrovexGlass->AddConstProperty("RESOLUTIONSCALE", 1.0);
 
@@ -3440,17 +3515,8 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
     G4LogicalVolume* single_Gel_logical = new G4LogicalVolume (single_Gel_solid2, Mat_LabAir, "single_Gelcorpus logical");
     G4LogicalVolume* single_TubeHolder_logical = new G4LogicalVolume (single_TubeHolder_solid,  Mat_LabAir, "single TubeHolder logical");
     
-    // 		PMT_physical[0] = new G4PVPlacement (0, G4ThreeVector(0,0,singlePMT_z), PMT_12199_tube_logical, "PMT_0_physical", single_Gel_logical, false, 0);
-    
-    //RefCone_physical[0] = new G4PVPlacement (0, G4ThreeVector(0,0,singlePMT_z + RefConeDZ), RefConeType1_logical, "RefCone_0_physical", single_Gel_logical, true, 0);
-    
-    
-    //TubeHolder_physical = new G4PVPlacement (0, G4ThreeVector(0,0,0), single_TubeHolder_logical, "TubeHolder physical", single_Gel_logical, true, 0);
-    //Gel_physical = new G4PVPlacement (0, G4ThreeVector(0,0,0), single_Gel_logical, "Gelcorpus physical", single_Glass_logical, true, 0);
-    //Glass_physical = new G4PVPlacement (0, G4ThreeVector(0,0,0), single_Glass_logical, "Glass_physAir", World_logical, true, 0);
-  //  G4LogicalSkinSurface* RefConeSurface = new G4LogicalSkinSurface("RefCone_skin", RefConeType1_logical, RefCone_optical);
-    
-    G4Box* mySample = new G4Box("Glass_phys", 1.5*cm,1.5*cm, 0.5*mm);
+    G4double zdist = 0.968/2.*cm;
+    G4Box* mySample = new G4Box("Glass_phys", 1.5044*cm,1.5044*cm, zdist);
     G4LogicalVolume* mySampleLog = new G4LogicalVolume (mySample, Mat_Vessel_Glass, "single_Glasscorpus logical");
     
     
@@ -3458,9 +3524,9 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
     G4LogicalVolume* myWorldLog = new G4LogicalVolume (myWorld, Mat_LabAir, "myairworld");
     G4PVPlacement* myworldphy = new G4PVPlacement (0, G4ThreeVector(0,0,10*cm), myWorldLog, "myworld", World_logical, true, 0);
     
-    G4VPhysicalVolume* RefCone2_physical = new G4PVPlacement (0, G4ThreeVector(0,0,RefConeDZ+0*CylHigh), RefConeType2_logical, "RefCone_2_physical", myWorldLog, true, 0);
+    //G4VPhysicalVolume* RefCone2_physical = new G4PVPlacement (0, G4ThreeVector(0,0,RefConeDZ+0*CylHigh), RefConeType2_logical, "RefCone_2_physical", myWorldLog, true, 0);
     PMT_physical[0] = new G4PVPlacement (0, G4ThreeVector(0,0,0), PMT_12199_tube_logical, "PMT_0_physical", myWorldLog, true, 0);
-    Glass_physical = new G4PVPlacement (0, G4ThreeVector(0,0,6*cm), mySampleLog, "Glass_phys", myWorldLog, true, 0);
+    Glass_physical = new G4PVPlacement (0, G4ThreeVector(0,0,4*cm+zdist), mySampleLog, "Glass_phys", myWorldLog, true, 0);
     // ------------------- visualisation attributes -------------------------------------------------------------------------------
     
     mySampleLog->SetVisAttributes(Glass_vis);

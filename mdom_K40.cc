@@ -56,6 +56,7 @@ G4String	gHittype;
 G4double	gscintYield;
 G4double	gscintTimeConst;
 G4double	gscintSpectrum;
+G4double	gTemperature;
 
 G4int		gDecayConditional;
 G4int		gQE;
@@ -232,10 +233,11 @@ int main(int argc,char *argv[])
 	struct arg_dbl	*scintYield	= arg_dbl0("yY", "scintYield", "<n>", "\t\tScintillation Yield of the glass (only Vitrovex). Default 20/MeV");
 	struct arg_dbl	*scintTimeConst	= arg_dbl0("tT", "scintTimeConst", "<n>", "\t\tScintillation's Time constant of the glass (only Vitrovex) in ns. Default 300000.");
 	struct arg_dbl	*scintSpectrum	= arg_dbl0("sS", "scintSpectrum", "<n>", "\t\tMove the scintillation's spectrum by # nm. Default 0 nm.");
+	struct arg_dbl	*Temperature 	= arg_dbl0("bB", "Temperature", "<n>", "\t\t Temperature for material property selection");
 	struct arg_lit	*help		= arg_lit0(NULL,"help","\t\tprint this help and exit");
 	
 	struct arg_int *QE = arg_int0("qQ","QE","<n>","\t\tQuantum efficiency ON = 1 or off =0. Killing events. Default 0.");
-	struct arg_end  *end		= arg_end(20);
+	struct arg_end  *end		= arg_end(21);
 	
 	void* argtable[] = {worldsize, 
 						events, 
@@ -257,6 +259,7 @@ int main(int argc,char *argv[])
 						scintYield,
 						scintTimeConst,
 						scintSpectrum,
+						Temperature,
 						help, 
 						QE,						
 						end};
@@ -293,6 +296,7 @@ int main(int argc,char *argv[])
 	scintYield->dval[0] = 20.0;
 	scintTimeConst->dval[0] = 300000.0;
 	scintSpectrum->dval[0] = 0.0;
+	Temperature->dval[0] = -35;
 	QE->ival[0]=1;
 	
 	/* Parse the command line as defined by argtable[] */
@@ -346,6 +350,7 @@ int main(int argc,char *argv[])
 	gscintYield = scintYield->dval[0];
 	gscintTimeConst = scintTimeConst->dval[0];
 	gscintSpectrum = scintSpectrum->dval[0];
+	gTemperature = Temperature->dval[0];
 	gQE = QE->ival[0];
 	
 	if (hittype->ival[0]==0){
