@@ -62,7 +62,7 @@ void mdomEventAction::EndOfEventAction(const G4Event* evt)
   if (gHittype == "detailed") {
     gAnalysisManager.WriteDetailPhotons(); 
     //gAnalysisManager.WriteMotherDecay();
-    //gAnalysisManager.WriteAccept();
+    gAnalysisManager.WriteAccept();
   }
   
   

@@ -60,7 +60,7 @@ void mdomPMT::loadThePMTInfo(){
     TransitTime = 0.0*43*ns;
     TTS =  0.0*2.542;
     
-    detectionProbability = 0.1;                               // Probability that the photon will not be registered.
+    detectionProbability = 1.0;                               // Probability that the photon will not be registered.
   }
   else if(gPMT == 1){
     QEfile = "../QEFiles/ETEL.cfg"; 
@@ -240,11 +240,11 @@ void mdomPMT::HitKiller(std::vector<MdomAnalysisManager::photonHit>& allHits)
     }
     else if ((allHits.at(i).realHit == 1) ){
       if ((triggerAcceptanceKiller())){
-	allHits.at(allHits.size()-1).Amplitude = 1;
+	allHits.at(i).Amplitude = 1;
       }
       else{
-	allHits.at(allHits.size()-1).Amplitude = 0;
-	allHits.at(allHits.size()-1).realHit = -1;
+	allHits.at(i).Amplitude = 0;
+	allHits.at(i).realHit = -1;
       }
     }
   }
@@ -268,7 +268,7 @@ void mdomPMT::HitKiller(std::vector<MdomAnalysisManager::photonHit>& allHits)
 // This function adds up the hits,  separating them by their creationProcess.
 void mdomPMT::HitsProcessCounter(G4int& CerenkovCounter, G4int& ScintCounter, std::vector<G4int>& photonIds, std::vector<G4String>& creationProcess , std::vector<MdomAnalysisManager::photonHit>& allHits )
 { for (int i = 0; i < (int) allHits.size(); i++) {
-  if(allHits.at(i).realHit ==1){
+  if(allHits.at(i).realHit ==1 || allHits.at(i).realHit ==2){
     G4int myindex = find(photonIds.begin(), photonIds.end(),allHits.at(i).hitPhotonID)- photonIds.begin(); 
     if (creationProcess.at(myindex) =="c"){
       CerenkovCounter++;}
@@ -391,7 +391,7 @@ void mdomPMT::WaveAmplitudeHitKiller( std::vector<MdomAnalysisManager::photonHit
 bool mdomPMT::triggerAcceptanceKiller()
 { 
   G4double rand = G4UniformRand();
-  if (rand <= detectionProbability){
+  if (rand < detectionProbability){
     return false;
   }
   else{

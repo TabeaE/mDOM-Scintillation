@@ -3515,6 +3515,14 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
     G4LogicalVolume* single_Gel_logical = new G4LogicalVolume (single_Gel_solid2, Mat_LabAir, "single_Gelcorpus logical");
     G4LogicalVolume* single_TubeHolder_logical = new G4LogicalVolume (single_TubeHolder_solid,  Mat_LabAir, "single TubeHolder logical");
     
+    G4Tubs* quelle_solid = new G4Tubs("Quelle solid", 0, 25*mm/2., 0.5*mm, 0, 2*pi);
+    G4LogicalVolume* quelle_logical = new G4LogicalVolume(quelle_solid, MatDatBase->FindOrBuildMaterial("G4_Fe"), "Quelle logical");
+    
+    
+    G4Tubs* ring_solid = new G4Tubs("Ring solid", 22*mm/2., 26*mm/2., 0.5*mm, 0, 2*pi);
+    G4LogicalVolume* ring_logical = new G4LogicalVolume(ring_solid, MatDatBase->FindOrBuildMaterial("G4_Fe"), "Ring logical");
+    
+    
     G4double zdist = 0.968/2.*cm;
     G4Box* mySample = new G4Box("Glass_phys", 1.5044*cm,1.5044*cm, zdist);
     G4LogicalVolume* mySampleLog = new G4LogicalVolume (mySample, Mat_Vessel_Glass, "single_Glasscorpus logical");
@@ -3527,6 +3535,8 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
     //G4VPhysicalVolume* RefCone2_physical = new G4PVPlacement (0, G4ThreeVector(0,0,RefConeDZ+0*CylHigh), RefConeType2_logical, "RefCone_2_physical", myWorldLog, true, 0);
     PMT_physical[0] = new G4PVPlacement (0, G4ThreeVector(0,0,0), PMT_12199_tube_logical, "PMT_0_physical", myWorldLog, true, 0);
     Glass_physical = new G4PVPlacement (0, G4ThreeVector(0,0,4*cm+zdist), mySampleLog, "Glass_phys", myWorldLog, true, 0);
+    G4PVPlacement* quelle_physical = new G4PVPlacement (0, G4ThreeVector(0,0,4*cm+zdist*2+1*mm+0.5*mm), quelle_logical, "Quelle_phys", myWorldLog, true, 0);
+    G4PVPlacement* ring_physical = new G4PVPlacement (0, G4ThreeVector(0,0,4*cm+zdist*2+0.5*mm), ring_logical, "ring_phys", myWorldLog, true, 0);
     // ------------------- visualisation attributes -------------------------------------------------------------------------------
     
     mySampleLog->SetVisAttributes(Glass_vis);

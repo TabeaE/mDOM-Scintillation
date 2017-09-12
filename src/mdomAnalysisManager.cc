@@ -79,13 +79,18 @@ void MdomAnalysisManager::WriteAccept()
 {
   int	pmthits[25] = {0};
   int sum = 0;
+  int alone = 0;
   //datafile << "# test header" << G4endl;
   
   
   // repacking hits:
   for (int i = 0; i < (int) atPhotocathode.size(); i++) {
-    if (atPhotocathode.at(i).realHit) {
+
+    if (atPhotocathode.at(i).realHit == 1 || atPhotocathode.at(i).realHit == 2) {
       pmthits[atPhotocathode.at(i).stats_PMT_hit] += 1;
+    }
+    if (atPhotocathode.at(i).realHit == -1) {
+      alone += 1;
     }
   }
   // wrinting collective hits
@@ -94,7 +99,7 @@ void MdomAnalysisManager::WriteAccept()
     sum += pmthits[j];
     pmthits[j] = 0;
   }
-  datafileTest << "\t" << sum <<"\t" << totalRC << "\t" << totalRS  ;
+  datafileTest << "\t" << sum <<"\t"  << alone <<"\t" << totalRC << "\t" << totalRS  ;
   datafileTest << G4endl;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......ooOO0OOooo........oooOO0OOooo......
