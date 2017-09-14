@@ -2577,8 +2577,8 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   
   
   G4MaterialPropertiesTable* proptable_air = new G4MaterialPropertiesTable();
-  
-  proptable_air->AddConstProperty("SCINTILLATIONYIELD",100/MeV);
+  /*
+  proptable_air->AddConstProperty("SCINTILLATIONYIELD",0/MeV);
   proptable_air->AddConstProperty("FIRSTAMPLITUDE",1);
   proptable_air->AddConstProperty("SECONDAMPLITUDE",0);
   proptable_air->AddConstProperty("THIRDAMPLITUDE",0);
@@ -2591,7 +2591,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   proptable_air->AddConstProperty("SECONDTIME",0);
   proptable_air->AddConstProperty("THIRDTIME",0);
 
-  proptable_air->AddConstProperty("RESOLUTIONSCALE", 1.0);
+  proptable_air->AddConstProperty("RESOLUTIONSCALE", 1.0);*/
   
   
   G4double VacuumPhotonEnergy[2] = {PHOTON_NRG_MIN, PHOTON_NRG_MAX};
@@ -3560,7 +3560,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
     G4LogicalVolume* mySampleLog = new G4LogicalVolume (mySample, Mat_Vessel_Glass, "single_Glasscorpus logical");
     
     
-    G4Orb* myWorld = new G4Orb("myAirWorldsolid",0.5*m);
+    G4Orb* myWorld = new G4Orb("myAirWorldsolid",gworldsize*m);
     G4LogicalVolume* myWorldLog = new G4LogicalVolume (myWorld, Mat_LabAir, "myairworld");
     G4PVPlacement* myworldphy = new G4PVPlacement (0, G4ThreeVector(0,0,0), myWorldLog, "myworld", World_logical, true, 0);
     
