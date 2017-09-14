@@ -2570,6 +2570,30 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   
   // ------------------------ air & vacuum ---------------------------------------------------
   
+  
+  
+  
+  
+  
+  
+  G4MaterialPropertiesTable* proptable_air = new G4MaterialPropertiesTable();
+  
+  proptable_air->AddConstProperty("SCINTILLATIONYIELD",100/MeV);
+  proptable_air->AddConstProperty("FIRSTAMPLITUDE",1);
+  proptable_air->AddConstProperty("SECONDAMPLITUDE",0);
+  proptable_air->AddConstProperty("THIRDAMPLITUDE",0);
+  
+  proptable_air->AddProperty("FIRSTCOMPONENT",Scnt_PP,Scnt_SLOW,32);
+  proptable_air->AddProperty("SECONDCOMPONENT",Scnt_PP,Scnt_SLOW,32);
+  proptable_air->AddProperty("THIRDCOMPONENT",Scnt_PP,Scnt_SLOW,32);
+  
+  proptable_air->AddConstProperty("FIRSTTIME",2*ns);
+  proptable_air->AddConstProperty("SECONDTIME",0);
+  proptable_air->AddConstProperty("THIRDTIME",0);
+
+  proptable_air->AddConstProperty("RESOLUTIONSCALE", 1.0);
+  
+  
   G4double VacuumPhotonEnergy[2] = {PHOTON_NRG_MIN, PHOTON_NRG_MAX};
   G4double VacuumRidx[2] = {1.0003, 1.0003};
   G4MaterialPropertiesTable* proptable_vacuum = new G4MaterialPropertiesTable();
@@ -2577,7 +2601,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   Mat_Vacuum->SetMaterialPropertiesTable(proptable_vacuum);
   
   G4double AirRidx[2] = {1.0003, 1.0003};
-  G4MaterialPropertiesTable* proptable_air = new G4MaterialPropertiesTable();
+  
   proptable_air->AddProperty("RINDEX", VacuumPhotonEnergy, AirRidx, 2);
   Mat_LabAir->SetMaterialPropertiesTable(proptable_air);
   
@@ -2632,7 +2656,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   
   PMT_12199_tube_solid = new G4UnionSolid("PMT_12199 tube solid", PMT_12199_ellips_solid, PMT_12199_sphere_solid, 0, G4ThreeVector(0,0,-28*mm));
   PMT_12199_ort_1 = G4ThreeVector(0,0,-(97-23.3)*0.5*mm);	
-  PMT_12199_tube_solid = new G4UnionSolid("PMT_12199 tube solid", PMT_12199_tube_solid, PMT_12199_bulk_solid, 0, PMT_12199_ort_1);
+  PMT_12199_tube_solid = new G4UnionSolid("PMT_12199 tube solid", PMT_12199_tube_solid, PMT_12199_bulk_solid, 0, PMT_12199_ort_1);    
   PMT_12199_tube_logical = new G4LogicalVolume(PMT_12199_tube_solid, Mat_Tube_Glass, "PMT_12199 tube logical");
   /*
    *	G4VSolid* PMT_12199_bulkA_solid = new G4Tubs("PMT_12199 solid bulkA", 0.0, 0.5*47.9*mm, (97-27.3)*0.5*mm, 0, 2*pi); // Semi-Vacuum Cylinder solid !
@@ -3523,26 +3547,43 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
     G4LogicalVolume* ring_logical = new G4LogicalVolume(ring_solid, MatDatBase->FindOrBuildMaterial("G4_Fe"), "Ring logical");
     
     
+    G4Box* holder1 = new G4Box("Holder 1", 8*cm/2., 16*mm/2., 16*mm/2.);
+    G4Box* holder2 = new G4Box("Holder 2", 8*cm/2., 16*mm/2., 16*mm/2.);
+    G4LogicalVolume* holder1_logical = new G4LogicalVolume(holder1, Mat_Absorber, "Holder1 logical");
+    G4LogicalVolume* holder2_logical = new G4LogicalVolume(holder2, Mat_Absorber, "Holder2 logical");
+
+    
     G4double zdist = 0.968/2.*cm;
+    G4double distToPMT = 3.6*cm-8*mm;
+    G4double PMTheight = (48.)*0.5*mm;
     G4Box* mySample = new G4Box("Glass_phys", 1.5044*cm,1.5044*cm, zdist);
     G4LogicalVolume* mySampleLog = new G4LogicalVolume (mySample, Mat_Vessel_Glass, "single_Glasscorpus logical");
     
     
-    G4Orb* myWorld = new G4Orb("myAirWorldsolid",1*m);
+    G4Orb* myWorld = new G4Orb("myAirWorldsolid",0.5*m);
     G4LogicalVolume* myWorldLog = new G4LogicalVolume (myWorld, Mat_LabAir, "myairworld");
-    G4PVPlacement* myworldphy = new G4PVPlacement (0, G4ThreeVector(0,0,10*cm), myWorldLog, "myworld", World_logical, true, 0);
+    G4PVPlacement* myworldphy = new G4PVPlacement (0, G4ThreeVector(0,0,0), myWorldLog, "myworld", World_logical, true, 0);
     
     //G4VPhysicalVolume* RefCone2_physical = new G4PVPlacement (0, G4ThreeVector(0,0,RefConeDZ+0*CylHigh), RefConeType2_logical, "RefCone_2_physical", myWorldLog, true, 0);
     PMT_physical[0] = new G4PVPlacement (0, G4ThreeVector(0,0,0), PMT_12199_tube_logical, "PMT_0_physical", myWorldLog, true, 0);
-    Glass_physical = new G4PVPlacement (0, G4ThreeVector(0,0,4*cm+zdist), mySampleLog, "Glass_phys", myWorldLog, true, 0);
-    G4PVPlacement* quelle_physical = new G4PVPlacement (0, G4ThreeVector(0,0,4*cm+zdist*2+1*mm+0.5*mm), quelle_logical, "Quelle_phys", myWorldLog, true, 0);
-    G4PVPlacement* ring_physical = new G4PVPlacement (0, G4ThreeVector(0,0,4*cm+zdist*2+0.5*mm), ring_logical, "ring_phys", myWorldLog, true, 0);
+    
+    Glass_physical = new G4PVPlacement (0, G4ThreeVector(0,0,distToPMT+8*mm-zdist+PMTheight), mySampleLog, "Glass_phys", myWorldLog, true, 0);
+    G4PVPlacement* quelle_physical = new G4PVPlacement (0, G4ThreeVector(0,0,distToPMT+8*mm+0.5*mm+1*mm+PMTheight), quelle_logical, "Quelle_phys", myWorldLog, true, 0);
+    G4PVPlacement* ring_physical = new G4PVPlacement (0, G4ThreeVector(0,0,distToPMT+8*mm+0.5*mm+PMTheight), ring_logical, "ring_phys", myWorldLog, true, 0);
+    
+    G4cout << distToPMT+8*mm+0.5*mm+1*mm+PMTheight << G4endl;
+    
+    G4PVPlacement* holder1_physical = new G4PVPlacement (0, G4ThreeVector(0,-1.5044*cm-8*mm,distToPMT+PMTheight), holder1_logical, "holder1_phys", myWorldLog, true, 0);
+    G4PVPlacement* holder2_physical = new G4PVPlacement (0, G4ThreeVector(0,1.5044*cm+8*mm,distToPMT+PMTheight), holder2_logical, "holder2_phys", myWorldLog, true, 0);
+    
+    
     // ------------------- visualisation attributes -------------------------------------------------------------------------------
     
     mySampleLog->SetVisAttributes(Glass_vis);
     myWorldLog->SetVisAttributes(World_vis);
     single_Gel_logical->SetVisAttributes(World_vis);
-    RefConeType2_logical->SetVisAttributes(Absorber_vis);
+    holder1_logical->SetVisAttributes(Absorber_vis);
+    holder2_logical->SetVisAttributes(Absorber_vis);
     single_TubeHolder_logical->SetVisAttributes(World_vis);
     //		single_Air_logical->SetVisAttributes(World_vis);
   }
