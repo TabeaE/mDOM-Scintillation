@@ -1971,7 +1971,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
     }
     
   };
-  
+  /*
   proptable_VitrovexGlass->AddConstProperty("SCINTILLATIONYIELD",scintYield);
   proptable_VitrovexGlass->AddConstProperty("FIRSTAMPLITUDE",FirstCompomentAmplitude[tempIndex]);
   proptable_VitrovexGlass->AddConstProperty("SECONDAMPLITUDE",SecondCompomentAmplitude[tempIndex]);
@@ -1986,7 +1986,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   proptable_VitrovexGlass->AddConstProperty("THIRDTIME",ThirdTime[tempIndex]);
   
   proptable_VitrovexGlass->AddConstProperty("RESOLUTIONSCALE", 1.0);
-
+*/
 
   //----------------_Scintillation-----------
   
@@ -2571,28 +2571,41 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   // ------------------------ air & vacuum ---------------------------------------------------
   
   
+
   
+  G4String AirSpectrumFile = "../Detector_construction_files/Scintillation_spectra/air.txt";
+  std::vector<double> fileFirstColumn = readColumnDouble(AirSpectrumFile, 1);
+  std::vector<double> fileSecondColumn = readColumnDouble(AirSpectrumFile, 2);  
+  //G4double* airScintWL = &
+  G4int ArraySize = fileFirstColumn.size();
   
+  G4double airScintWLD[ArraySize];
+  G4double airScintInD[ArraySize];
   
+  G4cout << ArraySize << G4endl;
   
-  
+  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    airScintWLD[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
+    airScintInD[u] = fileSecondColumn.at(u);
+  }
+
   G4MaterialPropertiesTable* proptable_air = new G4MaterialPropertiesTable();
-  /*
-  proptable_air->AddConstProperty("SCINTILLATIONYIELD",0/MeV);
+
+  proptable_air->AddConstProperty("SCINTILLATIONYIELD",scintYield);
   proptable_air->AddConstProperty("FIRSTAMPLITUDE",1);
   proptable_air->AddConstProperty("SECONDAMPLITUDE",0);
   proptable_air->AddConstProperty("THIRDAMPLITUDE",0);
   
-  proptable_air->AddProperty("FIRSTCOMPONENT",Scnt_PP,Scnt_SLOW,32);
-  proptable_air->AddProperty("SECONDCOMPONENT",Scnt_PP,Scnt_SLOW,32);
-  proptable_air->AddProperty("THIRDCOMPONENT",Scnt_PP,Scnt_SLOW,32);
+  proptable_air->AddProperty("FIRSTCOMPONENT",airScintWLD,airScintInD, ArraySize);
+  proptable_air->AddProperty("SECONDCOMPONENT",airScintWLD,airScintInD, ArraySize);
+  proptable_air->AddProperty("THIRDCOMPONENT",airScintWLD,airScintInD, ArraySize);
   
   proptable_air->AddConstProperty("FIRSTTIME",2*ns);
   proptable_air->AddConstProperty("SECONDTIME",0);
   proptable_air->AddConstProperty("THIRDTIME",0);
 
-  proptable_air->AddConstProperty("RESOLUTIONSCALE", 1.0);*/
-  
+  proptable_air->AddConstProperty("RESOLUTIONSCALE", 1.0);
+
   
   G4double VacuumPhotonEnergy[2] = {PHOTON_NRG_MIN, PHOTON_NRG_MAX};
   G4double VacuumRidx[2] = {1.0003, 1.0003};
@@ -3567,7 +3580,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
     //G4VPhysicalVolume* RefCone2_physical = new G4PVPlacement (0, G4ThreeVector(0,0,RefConeDZ+0*CylHigh), RefConeType2_logical, "RefCone_2_physical", myWorldLog, true, 0);
     PMT_physical[0] = new G4PVPlacement (0, G4ThreeVector(0,0,0), PMT_12199_tube_logical, "PMT_0_physical", myWorldLog, true, 0);
     
-    Glass_physical = new G4PVPlacement (0, G4ThreeVector(0,0,distToPMT+8*mm-zdist+PMTheight), mySampleLog, "Glass_phys", myWorldLog, true, 0);
+    //Glass_physical = new G4PVPlacement (0, G4ThreeVector(0,0,distToPMT+8*mm-zdist+PMTheight), mySampleLog, "Glass_phys", myWorldLog, true, 0);
     G4PVPlacement* quelle_physical = new G4PVPlacement (0, G4ThreeVector(0,0,distToPMT+8*mm+0.5*mm+1*mm+PMTheight), quelle_logical, "Quelle_phys", myWorldLog, true, 0);
     G4PVPlacement* ring_physical = new G4PVPlacement (0, G4ThreeVector(0,0,distToPMT+8*mm+0.5*mm+PMTheight), ring_logical, "ring_phys", myWorldLog, true, 0);
     

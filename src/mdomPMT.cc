@@ -43,8 +43,9 @@ mdomPMT::~mdomPMT(){
 
 void mdomPMT::loadThePMTInfo(){
   
-  deadTime= 8*ns;
+  deadTime=  0*ns;//1.0637e-06*s;
   OsciThreshold = 7; // in mV
+
   
   if (gDOM == 1){
     QEfile = "../QEFiles/DOM.cfg";
@@ -58,7 +59,7 @@ void mdomPMT::loadThePMTInfo(){
     QEfile = "../QEFiles/Hamamatsu12199-02.cfg";
     G4cout << "Time Response and QE for Hamamatsu 12199" << G4endl;
     TransitTime = 0.0*43*ns;
-    TTS =  0.0*2.542;
+    TTS =  0.96;
     
     detectionProbability = 1.0;                               // Probability that the photon will not be registered.
   }
@@ -81,7 +82,7 @@ void mdomPMT::loadThePMTInfo(){
     QEprobability= readColumnDouble(QEfile, 2);  
     PEtime= readColumnDouble(PEfile, 1);
     PEamp= readColumnDouble(PEfile, 2);  
-    
+
     for (unsigned int u = 0; u <QEwavelenght.size(); u++) {
       QEwavelenght[u] = QEwavelenght.at(u)*nm;
       QEprobability[u] = QEprobability.at(u)/100.;
@@ -419,8 +420,9 @@ void mdomPMT::Analysis() {
   MotherFinder(gAnalysisManager.atPhotocathode, gAnalysisManager.allParticles);
   
   HitsProcessCounter(gAnalysisManager.totalC, gAnalysisManager.totalS, gAnalysisManager.photonIds, gAnalysisManager.creationProcess , gAnalysisManager.atPhotocathode);
-
-  WaveAmplitudeHitKiller(gAnalysisManager.atPhotocathode);
+  
+  HitKiller(gAnalysisManager.atPhotocathode);
+  //WaveAmplitudeHitKiller(gAnalysisManager.atPhotocathode);
 
   
   HitsProcessCounter(gAnalysisManager.totalRC, gAnalysisManager.totalRS, gAnalysisManager.photonIds, gAnalysisManager.creationProcess , gAnalysisManager.atPhotocathode);

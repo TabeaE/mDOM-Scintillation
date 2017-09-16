@@ -35,7 +35,7 @@ if (true) {
   //datafile << stats_photon_energy.at(i) << "\t";
   //datafile << photonAmplitude.at(i) << "\t";
     datafile << atPhotocathode.at(i).Amplitude << "\t";
-    datafile << atPhotocathode.at(i).realHit << "\t";
+    datafile << atPhotocathode.at(i).stats_photon_energy << "\t";
   //datafile << stats_event_distance.at(i) << "\t";
   //datafile << stats_photon_Xposition.at(i)/m << "\t";
   //datafile << stats_photon_Yposition.at(i)/m << "\t";
