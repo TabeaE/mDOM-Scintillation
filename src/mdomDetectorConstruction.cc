@@ -1971,7 +1971,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
     }
     
   };
-  /*
+
   proptable_VitrovexGlass->AddConstProperty("SCINTILLATIONYIELD",scintYield);
   proptable_VitrovexGlass->AddConstProperty("FIRSTAMPLITUDE",FirstCompomentAmplitude[tempIndex]);
   proptable_VitrovexGlass->AddConstProperty("SECONDAMPLITUDE",SecondCompomentAmplitude[tempIndex]);
@@ -1986,7 +1986,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   proptable_VitrovexGlass->AddConstProperty("THIRDTIME",ThirdTime[tempIndex]);
   
   proptable_VitrovexGlass->AddConstProperty("RESOLUTIONSCALE", 1.0);
-*/
+
 
   //----------------_Scintillation-----------
   
