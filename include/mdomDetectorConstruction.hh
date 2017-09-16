@@ -28,6 +28,12 @@ class mdomDetectorConstruction : public G4VUserDetectorConstruction
 		G4VPhysicalVolume* Construct();
 
 	private:
+		G4String DataFile;
+		std::vector<double> fileFirstColumn;
+		std::vector<double> fileSecondColumn;
+		G4int ArraySize;
+	  
+	  
 		G4double Mie_Scattering(int u, int depth_pos);
 		G4double Spice_Absorption(int u, int depth_pos);
 		G4double Spice_Temperature(G4double depth);
