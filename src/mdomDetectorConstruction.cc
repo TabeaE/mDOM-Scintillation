@@ -89,6 +89,7 @@ mdomDetectorConstruction::~mdomDetectorConstruction()
 const G4int NUMENTRIES_ICE = 61;
 const G4int NUMENTRIES_DEPTH = 110;
 
+
 G4double ENERGY_spice[NUMENTRIES_ICE] = {
   1.56962*eV, 1.58974*eV, 1.61039*eV, 1.63157*eV,
   1.65333*eV, 1.67567*eV, 1.69863*eV, 1.72222*eV,
@@ -411,258 +412,62 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   // latest simulations provided by Almeco, 
   // coating of Vega material enhances refelctivity at desired wavelength, effect depends on n of surroundig material
   // V95 in air
-  G4double V95AirPhotonEnergy[28] = {
-    
-    hc_eVnm / 150.0*eV,
-    hc_eVnm / 200.0*eV,
-    hc_eVnm / 225.0*eV,
-    hc_eVnm / 250.0*eV,
-    hc_eVnm / 259.0*eV,
-    hc_eVnm / 270.5*eV,
-    hc_eVnm / 281.9*eV,
-    hc_eVnm / 295.0*eV,
-    hc_eVnm / 303.2*eV,
-    hc_eVnm / 317.1*eV,
-    hc_eVnm / 323.6*eV,
-    hc_eVnm / 329.4*eV,
-    hc_eVnm / 332.7*eV,
-    hc_eVnm / 335.1*eV,
-    hc_eVnm / 336.7*eV,
-    hc_eVnm / 340.8*eV,
-    hc_eVnm / 344.9*eV,
-    hc_eVnm / 348.2*eV,
-    hc_eVnm / 350.7*eV,
-    hc_eVnm / 358.0*eV,
-    hc_eVnm / 372.8*eV,
-    hc_eVnm / 399.8*eV,
-    hc_eVnm / 449.7*eV,
-    hc_eVnm / 499.6*eV,
-    hc_eVnm / 598.6*eV,
-    hc_eVnm / 648.5*eV,
-    hc_eVnm / 698.4*eV,
-    hc_eVnm / 730*eV
-  };
+    DataFile = "../Detector_construction_files/Reflectivity/V95_in_air.txt";   
+
+  fileFirstColumn = readColumnDouble(DataFile, 1);
+  fileSecondColumn = readColumnDouble(DataFile, 2);  
   
-  G4double V95AirReflectivity[28] = {
-    
-    0.000,
-    0.071,
-    0.117,
-    0.265,
-    0.277,
-    0.277,
-    0.269,
-    0.263,
-    0.245,
-    0.180,
-    0.166,
-    0.182,
-    0.215,
-    0.261,
-    0.315,
-    0.488,
-    0.695,
-    0.813,
-    0.865,
-    0.908,
-    0.946,
-    0.964,
-    0.968,
-    0.966,
-    0.944,
-    0.928,
-    0.898,
-    0.849
-  };
+  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
+    fileSecondColumn[u] = fileSecondColumn.at(u);  
+  }
+  G4double *V95AirPhotonEnergy =&fileFirstColumn[0];
+  G4double *V95AirReflectivity = &fileSecondColumn[0];
   
   // V95 in gel
-  G4double V95GelPhotonEnergy[27] = {
-    
-    hc_eVnm / 150.0*eV,
-    hc_eVnm / 200.0*eV,
-    hc_eVnm / 225.0*eV,
-    hc_eVnm / 250.0*eV,
-    hc_eVnm / 259.0*eV,
-    hc_eVnm / 269.6*eV,
-    hc_eVnm / 281.9*eV,
-    hc_eVnm / 290.9*eV,
-    hc_eVnm / 309.7*eV,
-    hc_eVnm / 314.6*eV,
-    hc_eVnm / 322.0*eV,
-    hc_eVnm / 328.6*eV,
-    hc_eVnm / 333.5*eV,
-    hc_eVnm / 336.7*eV,
-    hc_eVnm / 341.7*eV,
-    hc_eVnm / 349.0*eV,
-    hc_eVnm / 353.1*eV,
-    hc_eVnm / 363.3*eV,
-    hc_eVnm / 380.9*eV,
-    hc_eVnm / 398.9*eV,
-    hc_eVnm / 449.7*eV,
-    hc_eVnm / 499.6*eV,
-    hc_eVnm / 549.5*eV,
-    hc_eVnm / 599.0*eV,
-    hc_eVnm / 648.9*eV,
-    hc_eVnm / 698.9*eV,
-    hc_eVnm / 730*eV
-  };
   
-  G4double V95GelReflectivity[27] = {
-    
-    0.000,
-    0.071,
-    0.117,
-    0.206,
-    0.215,
-    0.205,
-    0.184,
-    0.180,
-    0.132,
-    0.104,
-    0.095,
-    0.116,
-    0.184,
-    0.301,
-    0.500,
-    0.801,
-    0.855,
-    0.906,
-    0.940,
-    0.952,
-    0.958,
-    0.954,
-    0.946,
-    0.932,
-    0.916,
-    0.893,
-    0.857
-  };
+  DataFile = "../Detector_construction_files/Reflectivity/V95_in_gel.txt";   
+
+  fileFirstColumn = readColumnDouble(DataFile, 1);
+  fileSecondColumn = readColumnDouble(DataFile, 2);  
+  
+  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
+    fileSecondColumn[u] = fileSecondColumn.at(u);  
+  }
+  G4double *V95GelPhotonEnergy =&fileFirstColumn[0];
+  G4double *V95GelReflectivity = &fileSecondColumn[0];
+
   
   // V98 in air
-  G4double V98AirPhotonEnergy[26] = {
-    
-    hc_eVnm / 150.0*eV,
-    hc_eVnm / 200.0*eV,
-    hc_eVnm / 225.0*eV,
-    hc_eVnm / 249.6*eV,
-    hc_eVnm / 261.9*eV,
-    hc_eVnm / 278.3*eV,
-    hc_eVnm / 294.7*eV,
-    hc_eVnm / 308.7*eV,
-    hc_eVnm / 319.8*eV,
-    hc_eVnm / 329.2*eV,
-    hc_eVnm / 333.7*eV,
-    hc_eVnm / 339.1*eV,
-    hc_eVnm / 341.5*eV,
-    hc_eVnm / 345.6*eV,
-    hc_eVnm / 348.9*eV,
-    hc_eVnm / 356.3*eV,
-    hc_eVnm / 362.9*eV,
-    hc_eVnm / 376.8*eV,
-    hc_eVnm / 399.4*eV,
-    hc_eVnm / 436.0*eV,
-    hc_eVnm / 468.8*eV,
-    hc_eVnm / 530.4*eV,
-    hc_eVnm / 600.2*eV,
-    hc_eVnm / 649.4*eV,
-    hc_eVnm / 716.7*eV,
-    hc_eVnm / 730*eV
-  };
+    DataFile = "../Detector_construction_files/Reflectivity/V98_in_air.txt";   
+
+  fileFirstColumn = readColumnDouble(DataFile, 1);
+  fileSecondColumn = readColumnDouble(DataFile, 2);  
   
-  G4double V98AirReflectivity[26] = {
-    
-    0.000,
-    0.102,
-    0.118,
-    0.306,
-    0.320,
-    0.316,
-    0.316,
-    0.294,
-    0.246,
-    0.151,
-    0.058,
-    0.024,
-    0.099,
-    0.302,
-    0.500,
-    0.703,
-    0.815,
-    0.877,
-    0.941,
-    0.965,
-    0.975,
-    0.982,
-    0.982,
-    0.978,
-    0.972,
-    0.971
-  };
+  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
+    fileSecondColumn[u] = fileSecondColumn.at(u);  
+  }
+  G4double *V98AirPhotonEnergy =&fileFirstColumn[0];
+  G4double *V98AirReflectivity = &fileSecondColumn[0];
+  
   
   // V98 in gel
-  G4double V98GelPhotonEnergy[28] = {
-    
-    hc_eVnm / 150.0*eV,
-    hc_eVnm / 200.0*eV,
-    hc_eVnm / 225.0*eV,
-    hc_eVnm / 248.8*eV,
-    hc_eVnm / 259.4*eV,
-    hc_eVnm / 270.1*eV,
-    hc_eVnm / 286.5*eV,
-    hc_eVnm / 304.6*eV,
-    hc_eVnm / 319.4*eV,
-    hc_eVnm / 325.1*eV,
-    hc_eVnm / 331.3*eV,
-    hc_eVnm / 335.8*eV,
-    hc_eVnm / 340.3*eV,
-    hc_eVnm / 343.6*eV,
-    hc_eVnm / 347.7*eV,
-    hc_eVnm / 352.2*eV,
-    hc_eVnm / 356.3*eV,
-    hc_eVnm / 365.4*eV,
-    hc_eVnm / 391.6*eV,
-    hc_eVnm / 401.5*eV,
-    hc_eVnm / 413.0*eV,
-    hc_eVnm / 440.1*eV,
-    hc_eVnm / 477.8*eV,
-    hc_eVnm / 522.2*eV,
-    hc_eVnm / 599.3*eV,
-    hc_eVnm / 650.2*eV,
-    hc_eVnm / 699.5*eV,
-    hc_eVnm / 730*eV
-  };
+  DataFile = "../Detector_construction_files/Reflectivity/V98_in_gel.txt";   
+
+  fileFirstColumn = readColumnDouble(DataFile, 1);
+  fileSecondColumn = readColumnDouble(DataFile, 2);  
   
-  G4double V98GelReflectivity[28] = {
-    
-    0.000,
-    0.102,
-    0.118,
-    0.243,
-    0.250,
-    0.239,
-    0.222,
-    0.193,
-    0.139,
-    0.085,
-    0.035,
-    0.014,
-    0.073,
-    0.160,
-    0.422,
-    0.598,
-    0.705,
-    0.799,
-    0.901,
-    0.927,
-    0.933,
-    0.953,
-    0.967,
-    0.972,
-    0.974,
-    0.974,
-    0.972,
-    0.970
-  };
+  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
+    fileSecondColumn[u] = fileSecondColumn.at(u);  
+  }
+  G4double *V98GelPhotonEnergy =&fileFirstColumn[0];
+  G4double *V98GelReflectivity = &fileSecondColumn[0];
+  
+
+ 
   
   // Total98
   // hypopthetical material with R = 98% for all wavelengths, inpored by CTA ligth concentrators with additinal coating
@@ -804,469 +609,80 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   Mat_BiAlkali->SetMaterialPropertiesTable(proptable_BiAlkali);
   
   // ------------------------------ tube glass -------------------------------------------------------------
+  DataFile = "../Detector_construction_files/Refractive_index/Tube_glass.txt";   
+
+  fileFirstColumn = readColumnDouble(DataFile, 1);
+  fileSecondColumn = readColumnDouble(DataFile, 2);  
   
-  G4double TubeGlassRIndPhotonEnergy[59] = {
-    
-    hc_eVnm / 150*eV,
-    hc_eVnm / 160*eV,
-    hc_eVnm / 170*eV,
-    hc_eVnm / 180*eV,
-    hc_eVnm / 190*eV,
-    hc_eVnm / 200*eV,
-    hc_eVnm / 210*eV,
-    hc_eVnm / 220*eV,
-    hc_eVnm / 230*eV,
-    hc_eVnm / 240*eV,
-    hc_eVnm / 250*eV,
-    hc_eVnm / 260*eV,
-    hc_eVnm / 270*eV,
-    hc_eVnm / 280*eV,
-    hc_eVnm / 290*eV,
-    hc_eVnm / 300*eV,
-    hc_eVnm / 310*eV,
-    hc_eVnm / 320*eV,
-    hc_eVnm / 330*eV,
-    hc_eVnm / 340*eV,
-    hc_eVnm / 350*eV,
-    hc_eVnm / 360*eV,
-    hc_eVnm / 370*eV,
-    hc_eVnm / 380*eV,
-    hc_eVnm / 390*eV,
-    hc_eVnm / 400*eV,
-    hc_eVnm / 410*eV,
-    hc_eVnm / 420*eV,
-    hc_eVnm / 430*eV,
-    hc_eVnm / 440*eV,
-    hc_eVnm / 450*eV,
-    hc_eVnm / 460*eV,
-    hc_eVnm / 470*eV,
-    hc_eVnm / 480*eV,
-    hc_eVnm / 490*eV,
-    hc_eVnm / 500*eV,
-    hc_eVnm / 510*eV,
-    hc_eVnm / 520*eV,
-    hc_eVnm / 530*eV,
-    hc_eVnm / 540*eV,
-    hc_eVnm / 550*eV,
-    hc_eVnm / 560*eV,
-    hc_eVnm / 570*eV,
-    hc_eVnm / 580*eV,
-    hc_eVnm / 590*eV,
-    hc_eVnm / 600*eV,
-    hc_eVnm / 610*eV,
-    hc_eVnm / 620*eV,
-    hc_eVnm / 630*eV,
-    hc_eVnm / 640*eV,
-    hc_eVnm / 650*eV,
-    hc_eVnm / 660*eV,
-    hc_eVnm / 670*eV,
-    hc_eVnm / 680*eV,
-    hc_eVnm / 690*eV,
-    hc_eVnm / 700*eV,
-    hc_eVnm / 710*eV,
-    hc_eVnm / 720*eV,
-    hc_eVnm / 730*eV
-  };
-  
-  G4double TubeGlassRInd[59] = {
-    
-    1.7371,
-    1.6932,
-    1.6603,
-    1.6349,
-    1.6149,
-    1.5987,
-    1.5855,
-    1.5744,
-    1.5651,
-    1.5572,
-    1.5504,
-    1.5445,
-    1.5394,
-    1.5348,
-    1.5308,
-    1.5273,
-    1.5241,
-    1.5213,
-    1.5187,
-    1.5164,
-    1.5143,
-    1.5123,
-    1.5106,
-    1.5090,
-    1.5075,
-    1.5061,
-    1.5049,
-    1.5037,
-    1.5026,
-    1.5016,
-    1.5007,
-    1.4998,
-    1.4990,
-    1.4983,
-    1.4976,
-    1.4969,
-    1.4963,
-    1.4957,
-    1.4951,
-    1.4946,
-    1.4941,
-    1.4937,
-    1.4932,
-    1.4928,
-    1.4924,
-    1.4920,
-    1.4917,
-    1.4913,
-    1.4910,
-    1.4907,
-    1.4904,
-    1.4901,
-    1.4899,
-    1.4896,
-    1.4894,
-    1.4891,
-    1.4889,
-    1.4887,
-    1.4885
-  };
+  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
+    fileSecondColumn[u] = fileSecondColumn.at(u);  
+  }
+  G4double *TubeGlassRIndPhotonEnergy =&fileFirstColumn[0];
+  G4double *TubeGlassRInd = &fileSecondColumn[0];
   
   // --------------------- general energies for refractive indices -----------------------------------------		
-  G4double GeneralRIndPhotonEnergy[49] = {
     
-    hc_eVnm / 250*eV,
-    hc_eVnm / 260*eV,
-    hc_eVnm / 270*eV,
-    hc_eVnm / 280*eV,
-    hc_eVnm / 290*eV,
-    hc_eVnm / 300*eV,
-    hc_eVnm / 310*eV,
-    hc_eVnm / 320*eV,
-    hc_eVnm / 330*eV,
-    hc_eVnm / 340*eV,
-    hc_eVnm / 350*eV,
-    hc_eVnm / 360*eV,
-    hc_eVnm / 370*eV,
-    hc_eVnm / 380*eV,
-    hc_eVnm / 390*eV,
-    hc_eVnm / 400*eV,
-    hc_eVnm / 410*eV,
-    hc_eVnm / 420*eV,
-    hc_eVnm / 430*eV,
-    hc_eVnm / 440*eV,
-    hc_eVnm / 450*eV,
-    hc_eVnm / 460*eV,
-    hc_eVnm / 470*eV,
-    hc_eVnm / 480*eV,
-    hc_eVnm / 490*eV,
-    hc_eVnm / 500*eV,
-    hc_eVnm / 510*eV,
-    hc_eVnm / 520*eV,
-    hc_eVnm / 530*eV,
-    hc_eVnm / 540*eV,
-    hc_eVnm / 550*eV,
-    hc_eVnm / 560*eV,
-    hc_eVnm / 570*eV,
-    hc_eVnm / 580*eV,
-    hc_eVnm / 590*eV,
-    hc_eVnm / 600*eV,
-    hc_eVnm / 610*eV,
-    hc_eVnm / 620*eV,
-    hc_eVnm / 630*eV,
-    hc_eVnm / 640*eV,
-    hc_eVnm / 650*eV,
-    hc_eVnm / 660*eV,
-    hc_eVnm / 670*eV,
-    hc_eVnm / 680*eV,
-    hc_eVnm / 690*eV,
-    hc_eVnm / 700*eV,
-    hc_eVnm / 710*eV,
-    hc_eVnm / 720*eV,
-    hc_eVnm / 730*eV
-  };
+        DataFile = "../Detector_construction_files/Refractive_index/General_energies.txt";  
+  fileFirstColumn = readColumnDouble(DataFile, 1);
   
+  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;   
+  }
+  G4double *GeneralRIndPhotonEnergy =&fileFirstColumn[0];
+
+    
+
   // --------------------- VitroVex-----------------------------------------		
+    DataFile = "../Detector_construction_files/Refractive_index/Vitrovex_glass.txt";  
+  fileFirstColumn = readColumnDouble(DataFile, 1);
   
-  G4double VitroVexGlassRInd[49] = {
-    
-    1.5229,
-    1.5179,
-    1.5135,
-    1.5095,
-    1.5060,
-    1.5029,
-    1.5001,
-    1.4975,
-    1.4952,
-    1.4931,
-    1.4912,
-    1.4895,
-    1.4879,
-    1.4864,
-    1.4851,
-    1.4838,
-    1.4827,
-    1.4816,
-    1.4806,
-    1.4797,
-    1.4789,
-    1.4781,
-    1.4773,
-    1.4766,
-    1.4759,
-    1.4753,
-    1.4747,
-    1.4742,
-    1.4737,
-    1.4732,
-    1.4727,
-    1.4723,
-    1.4719,
-    1.4715,
-    1.4711,
-    1.4708,
-    1.4704,
-    1.4701,
-    1.4698,
-    1.4695,
-    1.4693,
-    1.4690,
-    1.4687,
-    1.4685,
-    1.4683,
-    1.4681,
-    1.4678,
-    1.4676,
-    1.4674
-  };
-  
-  G4double VitroVexGlassPhotonEnergy[35] = {
-    
-    hc_eVnm / 730.0*eV,
-    hc_eVnm / 609.6*eV,
-    hc_eVnm / 599.5*eV,
-    hc_eVnm / 589.6*eV,
-    hc_eVnm / 579.6*eV,
-    hc_eVnm / 569.5*eV,
-    hc_eVnm / 559.5*eV,
-    hc_eVnm / 549.6*eV,
-    hc_eVnm / 539.5*eV,
-    hc_eVnm / 529.6*eV,
-    hc_eVnm / 519.6*eV,
-    hc_eVnm / 509.6*eV,
-    hc_eVnm / 499.7*eV,
-    hc_eVnm / 489.7*eV,
-    hc_eVnm / 479.6*eV,
-    hc_eVnm / 469.6*eV,
-    hc_eVnm / 459.7*eV,
-    hc_eVnm / 449.7*eV,
-    hc_eVnm / 439.7*eV,
-    hc_eVnm / 429.8*eV,
-    hc_eVnm / 419.7*eV,
-    hc_eVnm / 409.7*eV,
-    hc_eVnm / 399.7*eV,
-    hc_eVnm / 389.8*eV,
-    hc_eVnm / 379.7*eV,
-    hc_eVnm / 369.8*eV,
-    hc_eVnm / 359.8*eV,
-    hc_eVnm / 349.7*eV,
-    hc_eVnm / 339.8*eV,
-    hc_eVnm / 329.7*eV,
-    hc_eVnm / 319.8*eV,
-    hc_eVnm / 309.8*eV,
-    hc_eVnm / 299.8*eV,
-    hc_eVnm / 296.6*eV,
-    hc_eVnm / 230.0*eV
-  };
-  
-  G4double VitroVexGlassAbsLen[35] = {
-    
-    530.0*mm,
-    530.0*mm,
-    540.0*mm,
-    580.0*mm,
-    650.0*mm,
-    750.0*mm,
-    730.0*mm,
-    650.0*mm,
-    630.0*mm,
-    600.0*mm,
-    600.0*mm,
-    580.0*mm,
-    580.0*mm,
-    500.0*mm,
-    420.0*mm,
-    400.0*mm,
-    380.0*mm,
-    350.0*mm,
-    360.0*mm,
-    360.0*mm,
-    350.0*mm,
-    450.0*mm,
-    590.0*mm,
-    610.0*mm,
-    600.0*mm,
-    300.0*mm,
-    550.0*mm,
-    400.0*mm,
-    200.0*mm,
-    100.0*mm,
-    50.0*mm,
-    30.0*mm,
-    10.0*mm,
-    0.0*mm,
-    0.0*mm
-  };
+  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    fileFirstColumn[u] = fileFirstColumn.at(u);  
+  }
+  G4double *VitroVexGlassRInd =&fileFirstColumn[0];
   
   
   
+    DataFile = "../Detector_construction_files/Abs_length/Vitrovex_glass.txt";         
+  fileFirstColumn = readColumnDouble(DataFile, 1);
+  fileSecondColumn = readColumnDouble(DataFile, 2);  
+  
+  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
+    fileSecondColumn[u] = fileSecondColumn.at(u)*mm;  
+  }
+  G4double *VitroVexGlassPhotonEnergy =&fileFirstColumn[0];
+  G4double *VitroVexGlassAbsLen = &fileSecondColumn[0];
+
+
   
   // -------------------------- Chiba glass -----------------------------------------------------------
+  DataFile = "../Detector_construction_files/Refractive_index/Chiba_glass.txt";  
+  fileFirstColumn = readColumnDouble(DataFile, 1);
   
-  G4double ChibaGlassRInd[49] = {
-    
-    1.5504,
-    1.5445,
-    1.5394,
-    1.5348,
-    1.5308,
-    1.5273,
-    1.5241,
-    1.5213,
-    1.5187,
-    1.5164,
-    1.5143,
-    1.5123,
-    1.5106,
-    1.5090,
-    1.5075,
-    1.5061,
-    1.5049,
-    1.5037,
-    1.5026,
-    1.5016,
-    1.5007,
-    1.4998,
-    1.4990,
-    1.4983,
-    1.4976,
-    1.4969,
-    1.4963,
-    1.4957,
-    1.4951,
-    1.4946,
-    1.4941,
-    1.4937,
-    1.4932,
-    1.4928,
-    1.4924,
-    1.4920,
-    1.4917,
-    1.4913,
-    1.4910,
-    1.4907,
-    1.4904,
-    1.4901,
-    1.4899,
-    1.4896,
-    1.4894,
-    1.4891,
-    1.4889,
-    1.4887,
-    1.4885
-  };
+  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    fileFirstColumn[u] = fileFirstColumn.at(u);  
+  }
+  G4double *ChibaGlassRInd =&fileFirstColumn[0];
   
-  G4double ChibaGlassAbsPhotonEnergy[37] = {
-    
-    hc_eVnm / 250.0*eV,
-    hc_eVnm / 254.0*eV,
-    hc_eVnm / 258.0*eV,
-    hc_eVnm / 262.0*eV,
-    hc_eVnm / 266.0*eV,
-    hc_eVnm / 270.0*eV,
-    hc_eVnm / 274.0*eV,
-    hc_eVnm / 278.0*eV,
-    hc_eVnm / 282.0*eV,
-    hc_eVnm / 286.0*eV,
-    hc_eVnm / 290.0*eV,
-    hc_eVnm / 294.0*eV,
-    hc_eVnm / 298.0*eV,
-    hc_eVnm / 302.0*eV,
-    hc_eVnm / 306.0*eV,
-    hc_eVnm / 310.0*eV,
-    hc_eVnm / 314.0*eV,
-    hc_eVnm / 318.0*eV,
-    hc_eVnm / 322.0*eV,
-    hc_eVnm / 326.0*eV,
-    hc_eVnm / 330.0*eV,
-    hc_eVnm / 335.0*eV,
-    hc_eVnm / 340.0*eV,
-    hc_eVnm / 347.0*eV,
-    hc_eVnm / 351.0*eV,
-    hc_eVnm / 355.0*eV,
-    hc_eVnm / 368.0*eV,
-    hc_eVnm / 372.0*eV,
-    hc_eVnm / 376.0*eV,
-    hc_eVnm / 380.0*eV,
-    hc_eVnm / 384.0*eV,
-    hc_eVnm / 388.0*eV,
-    hc_eVnm / 392.0*eV,
-    hc_eVnm / 397.0*eV,
-    hc_eVnm / 401.0*eV,
-    hc_eVnm / 405.0*eV,
-    hc_eVnm / 730.0*eV
-  };
   
-  G4double ChibaGlassAbsLen[37] = {
-    
-    0*mm,
-    0*mm,
-    0*mm,
-    0*mm,		
-    
-    // 		1.7*mm,		// probably unphysical values
-    // 		1.7*mm,
-    // 		1.7*mm,
-    // 		1.7*mm,
-    
-    1.7*mm,
-    1.8*mm,
-    2.0*mm,
-    2.2*mm,
-    2.6*mm,
-    3.2*mm,
-    4.1*mm,
-    5.4*mm,
-    7.2*mm,
-    9.4*mm,
-    12.6*mm,
-    16.8*mm,
-    22.9*mm,
-    29.2*mm,
-    40.9*mm,
-    54.5*mm,
-    78.4*mm,
-    99.5*mm,
-    172.3*mm,
-    250.7*mm,
-    320.1*mm,
-    480.7*mm,
-    1434.1*mm,
-    1434.1*mm,
-    1434.1*mm,
-    1434.1*mm,
-    1434.1*mm,
-    1434.1*mm,
-    1434.1*mm,
-    1434.1*mm,
-    1434.1*mm,
-    1434.1*mm,
-    1434.1*mm
-  };
+  DataFile = "../Detector_construction_files/Abs_length/Chiba_glass.txt";         // probably unphysical values
+  fileFirstColumn = readColumnDouble(DataFile, 1);
+  fileSecondColumn = readColumnDouble(DataFile, 2);  
+  
+  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
+    fileSecondColumn[u] = fileSecondColumn.at(u)*mm;  
+  }
+  G4double *ChibaGlassAbsPhotonEnergy =&fileFirstColumn[0];
+  G4double *ChibaGlassAbsLen = &fileSecondColumn[0];
+
+
   
   // ------------------------- IceCube glass --------------------------------------------------
   // values taken from DOMINANT simulation code from Chiba
-      DataFile = "../Detector_construction_files/Abs_length/IceCube_glass.txt";
+  DataFile = "../Detector_construction_files/Abs_length/IceCube_glass.txt";
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
@@ -1276,12 +692,10 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   }
   G4double *IceCubeGlassPhotonEnergy =&fileFirstColumn[0];
   G4double *IceCubeGlassAbsLen = &fileSecondColumn[0];
-    for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    G4cout << hc_eVnm /IceCubeGlassPhotonEnergy[u] * nm << " " <<IceCubeGlassAbsLen[u] << G4endl;
-  }
 
+  
   // --------------------- my VitroVex-----------------------------------------		
-    DataFile = "../Detector_construction_files/Abs_length/myVitrovex_glass.txt";
+  DataFile = "../Detector_construction_files/Abs_length/myVitrovex_glass.txt";
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
@@ -1291,7 +705,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   }
   G4double *myVitroVexGlassPhotonEnergy =&fileFirstColumn[0];
   G4double *myVitroVexGlassAbsLen = &fileSecondColumn[0];
-
+  
   
   // -------------------------- my Chiba glass -----------------------------------------------------------
   DataFile = "../Detector_construction_files/Abs_length/myChiba_glass.txt";
@@ -1304,7 +718,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   }
   G4double *myChibaGlassAbsPhotonEnergy =&fileFirstColumn[0];
   G4double *myChibaGlassAbsLen = &fileSecondColumn[0];
-
+  
   
   // ------------------------- WOM quartz glass --------------------------------------------------
   // refractive index from Refractive index info
@@ -1321,7 +735,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   G4double *QuartzRIndPhotonEnergy =&fileFirstColumn[0];
   G4double *QuartzGlassRInd = &fileSecondColumn[0];
   
-
+  
   
   DataFile = "../Detector_construction_files/Abs_length/WOM_quartz.txt";
   fileFirstColumn = readColumnDouble(DataFile, 1);
