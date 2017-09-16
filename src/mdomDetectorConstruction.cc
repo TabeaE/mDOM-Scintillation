@@ -417,12 +417,14 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
+  G4double V95AirPhotonEnergy[28];
+  G4double V95AirReflectivity[28];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), V95AirPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), V95AirReflectivity);
+  
   for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u);  
+    V95AirPhotonEnergy[u] = hc_eVnm /  V95AirPhotonEnergy[u] *eV;   
   }
-  G4double *V95AirPhotonEnergy =&fileFirstColumn[0];
-  G4double *V95AirReflectivity = &fileSecondColumn[0];
   
   // V95 in gel
   
@@ -430,43 +432,46 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
+
+  G4double V95GelPhotonEnergy[27];
+  G4double V95GelReflectivity[27];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), V95GelPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), V95GelReflectivity);
   
   for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u);  
+    V95GelPhotonEnergy[u] = hc_eVnm /  V95GelPhotonEnergy[u] *eV;   
   }
-  G4double *V95GelPhotonEnergy =&fileFirstColumn[0];
-  G4double *V95GelReflectivity = &fileSecondColumn[0];
-  
-  
+   
   // V98 in air
   DataFile = "../Detector_construction_files/Reflectivity/V98_in_air.txt";   
   
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
+
+  G4double V98AirPhotonEnergy[26];
+  G4double V98AirReflectivity[26];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), V98AirPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), V98AirReflectivity);
   
   for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u);  
+    V98AirPhotonEnergy[u] = hc_eVnm /  V98AirPhotonEnergy[u] *eV;   
   }
-  G4double *V98AirPhotonEnergy =&fileFirstColumn[0];
-  G4double *V98AirReflectivity = &fileSecondColumn[0];
-  
   
   // V98 in gel
   DataFile = "../Detector_construction_files/Reflectivity/V98_in_gel.txt";   
   
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
+
   
-  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u);  
+  G4double V98GelPhotonEnergy[28];
+  G4double V98GelReflectivity[28];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), V98GelPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), V98GelReflectivity);
+  
+    for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    V98GelPhotonEnergy[u] = hc_eVnm /  V98GelPhotonEnergy[u] *eV;   
   }
-  G4double *V98GelPhotonEnergy =&fileFirstColumn[0];
-  G4double *V98GelReflectivity = &fileSecondColumn[0];
-  
-  
   
   
   // Total98
@@ -613,113 +618,115 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
+  G4double TubeGlassRIndPhotonEnergy[59];
+  G4double TubeGlassRInd[59];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), TubeGlassRIndPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), TubeGlassRInd);
   
   for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u);  
+    TubeGlassRIndPhotonEnergy[u] = hc_eVnm /  TubeGlassRIndPhotonEnergy[u] *eV;   
   }
-  G4double *TubeGlassRIndPhotonEnergy =&fileFirstColumn[0];
-  G4double *TubeGlassRInd = &fileSecondColumn[0];
+
   
   // --------------------- general energies for refractive indices -----------------------------------------		
   
   DataFile = "../Detector_construction_files/Refractive_index/General_energies.txt";  
   fileFirstColumn = readColumnDouble(DataFile, 1);
+  G4double GeneralRIndPhotonEnergy[49];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), GeneralRIndPhotonEnergy);
   
   for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;   
+    GeneralRIndPhotonEnergy[u] = hc_eVnm / GeneralRIndPhotonEnergy[u] *eV;   
   }
-  G4double *GeneralRIndPhotonEnergy =&fileFirstColumn[0];
+  
   
   
   
   // --------------------- VitroVex-----------------------------------------		
   DataFile = "../Detector_construction_files/Refractive_index/Vitrovex_glass.txt";  
   fileFirstColumn = readColumnDouble(DataFile, 1);
-  
-  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = fileFirstColumn.at(u);  
-  }
-  G4double *VitroVexGlassRInd =&fileFirstColumn[0];
-  
-  
+  G4double VitroVexGlassRInd[49];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), VitroVexGlassRInd);
   
   DataFile = "../Detector_construction_files/Abs_length/Vitrovex_glass.txt";         
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
-  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u)*mm;  
-  }
-  G4double *VitroVexGlassPhotonEnergy =&fileFirstColumn[0];
-  G4double *VitroVexGlassAbsLen = &fileSecondColumn[0];
+  G4double VitroVexGlassPhotonEnergy[35];
+  G4double VitroVexGlassAbsLen[35];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), VitroVexGlassPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), VitroVexGlassAbsLen);
   
+    for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    VitroVexGlassPhotonEnergy[u] = hc_eVnm / VitroVexGlassPhotonEnergy[u]*eV;  
+    VitroVexGlassAbsLen[u] = VitroVexGlassAbsLen[u]*mm;  
+  }
   
   
   // -------------------------- Chiba glass -----------------------------------------------------------
   DataFile = "../Detector_construction_files/Refractive_index/Chiba_glass.txt";  
   fileFirstColumn = readColumnDouble(DataFile, 1);
-  
-  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = fileFirstColumn.at(u);  
-  }
-  G4double *ChibaGlassRInd =&fileFirstColumn[0];
-  
-  
+  G4double ChibaGlassRInd[49];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), ChibaGlassRInd);
+
   DataFile = "../Detector_construction_files/Abs_length/Chiba_glass.txt";         // probably unphysical values
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
-  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u)*mm;  
-  }
-  G4double *ChibaGlassAbsPhotonEnergy =&fileFirstColumn[0];
-  G4double *ChibaGlassAbsLen = &fileSecondColumn[0];
+  G4double ChibaGlassAbsPhotonEnergy[37];
+  G4double ChibaGlassAbsLen[37];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), ChibaGlassAbsPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), ChibaGlassAbsLen);
   
-  
+    for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    ChibaGlassAbsPhotonEnergy[u] = hc_eVnm / ChibaGlassAbsPhotonEnergy[u]*eV;  
+    ChibaGlassAbsLen[u] = ChibaGlassAbsLen[u]*mm;  
+    }
   
   // ------------------------- IceCube glass --------------------------------------------------
   // values taken from DOMINANT simulation code from Chiba
   DataFile = "../Detector_construction_files/Abs_length/IceCube_glass.txt";
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
+
+  G4double IceCubeGlassPhotonEnergy[36];
+  G4double IceCubeGlassAbsLen[36];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), IceCubeGlassPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), IceCubeGlassAbsLen);
   
-  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u)*mm;  
-  }
-  G4double *IceCubeGlassPhotonEnergy =&fileFirstColumn[0];
-  G4double *IceCubeGlassAbsLen = &fileSecondColumn[0];
-  
-  
+    for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    IceCubeGlassPhotonEnergy[u] = hc_eVnm / IceCubeGlassPhotonEnergy[u]*eV;  
+    IceCubeGlassAbsLen[u] = IceCubeGlassAbsLen[u]*mm;  
+    }
   // --------------------- my VitroVex-----------------------------------------		
   DataFile = "../Detector_construction_files/Abs_length/myVitrovex_glass.txt";
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
+
+  G4double myVitroVexGlassPhotonEnergy[82];
+  G4double myVitroVexGlassAbsLen[82];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), myVitroVexGlassPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), myVitroVexGlassAbsLen);
   
-  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u)*mm;  
-  }
-  G4double *myVitroVexGlassPhotonEnergy =&fileFirstColumn[0];
-  G4double *myVitroVexGlassAbsLen = &fileSecondColumn[0];
-  
-  
+    for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    myVitroVexGlassPhotonEnergy[u] = hc_eVnm / myVitroVexGlassPhotonEnergy[u]*eV;  
+    myVitroVexGlassAbsLen[u] = myVitroVexGlassAbsLen[u]*mm;  
+    } 
   // -------------------------- my Chiba glass -----------------------------------------------------------
   DataFile = "../Detector_construction_files/Abs_length/myChiba_glass.txt";
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
-  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u)*mm;  
-  }
-  G4double *myChibaGlassAbsPhotonEnergy =&fileFirstColumn[0];
-  G4double *myChibaGlassAbsLen = &fileSecondColumn[0];
+  G4double myChibaGlassAbsPhotonEnergy[23];
+  G4double myChibaGlassAbsLen[23];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), myChibaGlassAbsPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), myChibaGlassAbsLen);
   
-  
+    for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    myChibaGlassAbsPhotonEnergy[u] = hc_eVnm / myChibaGlassAbsPhotonEnergy[u]*eV;  
+    myChibaGlassAbsLen[u] = myChibaGlassAbsLen[u]*mm;  
+    }
+    
   // ------------------------- WOM quartz glass --------------------------------------------------
   // refractive index from Refractive index info
   // from I. H. Malitson. Interspecimen Comparison of the Refractive Index of Fused Silica, J. Opt. Soc. Am. 55, 1205-1208 (1965)
@@ -728,12 +735,14 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
+  G4double QuartzRIndPhotonEnergy[31];
+  G4double QuartzGlassRInd[31];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), QuartzRIndPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), QuartzGlassRInd);
+  
   for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u);  
+    QuartzRIndPhotonEnergy[u] = hc_eVnm / QuartzRIndPhotonEnergy[u]*eV;  
   }
-  G4double *QuartzRIndPhotonEnergy =&fileFirstColumn[0];
-  G4double *QuartzGlassRInd = &fileSecondColumn[0];
   
   
   
@@ -741,13 +750,15 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
-  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u)*mm;  
-  }
-  G4double *WOMGlassAbsPhotonEnergy =&fileFirstColumn[0];
-  G4double *WOMGlassAbsLen = &fileSecondColumn[0];
+  G4double WOMGlassAbsPhotonEnergy[32];
+  G4double WOMGlassAbsLen[32];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), WOMGlassAbsPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), WOMGlassAbsLen);
   
+  for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
+    WOMGlassAbsPhotonEnergy[u] = hc_eVnm / WOMGlassAbsPhotonEnergy[u]*eV;  
+    WOMGlassAbsLen[u] = WOMGlassAbsLen[u]*mm; 
+  }
   
   // ------------------------- Fused Silica --------------------------------------------------
   // data from Thorlabs https://www.thorlabs.de/newgrouppage9.cfm?objectgroup_id=3983
@@ -756,14 +767,15 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
+  G4double FusedSilicaAbsPhotonEnergy[26];
+  G4double FusedSilicaGlassAbsLen[26];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), FusedSilicaAbsPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), FusedSilicaGlassAbsLen);
+  
   for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u)*mm;  
+    FusedSilicaAbsPhotonEnergy[u] = hc_eVnm / FusedSilicaAbsPhotonEnergy[u]*eV;  
+    FusedSilicaGlassAbsLen[u] = FusedSilicaGlassAbsLen[u]*mm; 
   }
-  G4double *FusedSilicaAbsPhotonEnergy =&fileFirstColumn[0];
-  G4double *FusedSilicaGlassAbsLen = &fileSecondColumn[0];
-  
-  
   
   //----------------_Scintillation-----------
   // distribution of produced optical photons
@@ -965,7 +977,10 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   
   
   //----------------_Scintillation-----------
-  
+    for (unsigned int u = 0; u <49; u++) {
+    G4cout << GeneralRIndPhotonEnergy[u] << " "  << VitroVexGlassRInd[u] <<  G4endl;
+  }
+
   proptable_VitrovexGlass->AddProperty("RINDEX", GeneralRIndPhotonEnergy, VitroVexGlassRInd, 49);
   proptable_VitrovexGlass->AddProperty("ABSLENGTH", VitroVexGlassPhotonEnergy, VitroVexGlassAbsLen,35);
   
@@ -981,6 +996,8 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   
   
   // myVitroVex glass (values deduced from my measurement)
+  
+  
   G4MaterialPropertiesTable* proptable_myVitrovexGlass = new G4MaterialPropertiesTable();
   proptable_myVitrovexGlass->AddProperty("RINDEX", GeneralRIndPhotonEnergy, VitroVexGlassRInd, 49);
   proptable_myVitrovexGlass->AddProperty("ABSLENGTH", myVitroVexGlassPhotonEnergy, myVitroVexGlassAbsLen, 82);
@@ -1037,12 +1054,16 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
+  G4double WackerGelPhotonEnergy[34];
+  G4double WackerGelAbsLen[34];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), WackerGelPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), WackerGelAbsLen);
+  
   for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u)*mm;  
+    WackerGelPhotonEnergy[u] = hc_eVnm / WackerGelPhotonEnergy[u]*eV;  
+    WackerGelAbsLen[u] = WackerGelAbsLen[u]*mm; 
   }
-  G4double *WackerGelPhotonEnergy =&fileFirstColumn[0];
-  G4double *WackerGelAbsLen = &fileSecondColumn[0];
+
   
   
   // ---------------------- Chiba gel ----------------------------------------------------------
@@ -1050,18 +1071,23 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   DataFile = "../Detector_construction_files/Refractive_index/Chiba_gel.txt";
   fileFirstColumn = readColumnDouble(DataFile, 1);
   
-  G4double *ChibaGelRInd = &fileFirstColumn[0];
+  G4double ChibaGelRInd[49];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), ChibaGelRInd);
   
   DataFile = "../Detector_construction_files/Abs_length/Chiba_gel.txt";
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
+  G4double ChibaGelPhotonEnergy[17];
+  G4double ChibaGelAbsLen[17];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), ChibaGelPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), ChibaGelAbsLen);
+  
   for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u)*mm;  
+    ChibaGelPhotonEnergy[u] = hc_eVnm / ChibaGelPhotonEnergy[u]*eV;  
+    ChibaGelAbsLen[u] = ChibaGelAbsLen[u]*mm; 
   }
-  G4double *ChibaGelPhotonEnergy =&fileFirstColumn[0];
-  G4double *ChibaGelAbsLen = &fileSecondColumn[0];
+  
   
   // ----------------------- IceCube gel ---------------------------------------------------
   G4double IceCubeGelRInd[49];
@@ -1070,14 +1096,17 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   DataFile = "../Detector_construction_files/Abs_length/IceCube_gel.txt";
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
-  
+
+  G4double IceCubeGelPhotonEnergy[36];
+  G4double IceCubeGelAbsLen[36];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), IceCubeGelPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), IceCubeGelAbsLen);
   
   for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u)*mm;  
+    IceCubeGelPhotonEnergy[u] = hc_eVnm / IceCubeGelPhotonEnergy[u]*eV;  
+    IceCubeGelAbsLen[u] = IceCubeGelAbsLen[u]*mm; 
   }
-  G4double *IceCubeGelPhotonEnergy =&fileFirstColumn[0];
-  G4double *IceCubeGelAbsLen = &fileSecondColumn[0];
+  
   
   // ------------------------ Wacker gel with company data at UV ---------------------
   // data below 300 nm taken from transmission measurement of 5mm gel, provided by company 
@@ -1085,27 +1114,30 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   DataFile = "../Detector_construction_files/Refractive_index/Wacker_company.txt";
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
-  
+
+  G4double WackerCompanyGelRIndPhotonEnergy[59];
+  G4double WackerCompanyGelRInd[59];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), WackerCompanyGelRIndPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), WackerCompanyGelRInd);
   
   for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u);  
+    WackerCompanyGelRIndPhotonEnergy[u] = hc_eVnm / WackerCompanyGelRIndPhotonEnergy[u]*eV;  
   }
-  G4double *WackerCompanyGelRIndPhotonEnergy =&fileFirstColumn[0];
-  G4double *WackerCompanyGelRInd = &fileSecondColumn[0];
-  
   
   
   DataFile = "../Detector_construction_files/Abs_length/Wacker_company.txt";
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
+  G4double WackerCompanyGelPhotonEnergy[41];
+  G4double WackerCompanyGelAbsLen[41];
+  std::copy(fileFirstColumn.begin(), fileFirstColumn.end(), WackerCompanyGelPhotonEnergy);
+  std::copy(fileSecondColumn.begin(), fileSecondColumn.end(), WackerCompanyGelAbsLen);
+  
   for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
-    fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
-    fileSecondColumn[u] = fileSecondColumn.at(u)*mm;  
+    WackerCompanyGelPhotonEnergy[u] = hc_eVnm / WackerCompanyGelPhotonEnergy[u]*eV;  
+    WackerCompanyGelAbsLen[u] = WackerCompanyGelAbsLen[u]*mm; 
   }
-  G4double *WackerCompanyGelPhotonEnergy =&fileFirstColumn[0];
-  G4double *WackerCompanyGelAbsLen = &fileSecondColumn[0];
   
   // ----------------------- choosing gel for simulation -------------------------------------
   // Wacker SilGel 612 A/B (from KM3NeT data)
@@ -1149,12 +1181,9 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   DataFile = "../Detector_construction_files/Scintillation_spectra/air.txt";
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
-  
-  ArraySize = fileFirstColumn.size();
-  
-  G4double airScintWLD[ArraySize];
-  G4double airScintInD[ArraySize];
-  
+
+  G4double airScintWLD[367];
+  G4double airScintInD[367];
   
   for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
     airScintWLD[u] = hc_eVnm / fileFirstColumn.at(u)*eV;  
