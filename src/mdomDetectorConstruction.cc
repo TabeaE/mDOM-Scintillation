@@ -412,8 +412,8 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   // latest simulations provided by Almeco, 
   // coating of Vega material enhances refelctivity at desired wavelength, effect depends on n of surroundig material
   // V95 in air
-    DataFile = "../Detector_construction_files/Reflectivity/V95_in_air.txt";   
-
+  DataFile = "../Detector_construction_files/Reflectivity/V95_in_air.txt";   
+  
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
@@ -427,7 +427,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   // V95 in gel
   
   DataFile = "../Detector_construction_files/Reflectivity/V95_in_gel.txt";   
-
+  
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
@@ -437,11 +437,11 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   }
   G4double *V95GelPhotonEnergy =&fileFirstColumn[0];
   G4double *V95GelReflectivity = &fileSecondColumn[0];
-
+  
   
   // V98 in air
-    DataFile = "../Detector_construction_files/Reflectivity/V98_in_air.txt";   
-
+  DataFile = "../Detector_construction_files/Reflectivity/V98_in_air.txt";   
+  
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
@@ -455,7 +455,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   
   // V98 in gel
   DataFile = "../Detector_construction_files/Reflectivity/V98_in_gel.txt";   
-
+  
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
@@ -466,8 +466,8 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   G4double *V98GelPhotonEnergy =&fileFirstColumn[0];
   G4double *V98GelReflectivity = &fileSecondColumn[0];
   
-
- 
+  
+  
   
   // Total98
   // hypopthetical material with R = 98% for all wavelengths, inpored by CTA ligth concentrators with additinal coating
@@ -610,7 +610,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   
   // ------------------------------ tube glass -------------------------------------------------------------
   DataFile = "../Detector_construction_files/Refractive_index/Tube_glass.txt";   
-
+  
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
@@ -622,19 +622,19 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   G4double *TubeGlassRInd = &fileSecondColumn[0];
   
   // --------------------- general energies for refractive indices -----------------------------------------		
-    
-        DataFile = "../Detector_construction_files/Refractive_index/General_energies.txt";  
+  
+  DataFile = "../Detector_construction_files/Refractive_index/General_energies.txt";  
   fileFirstColumn = readColumnDouble(DataFile, 1);
   
   for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
     fileFirstColumn[u] = hc_eVnm / fileFirstColumn.at(u)*eV;   
   }
   G4double *GeneralRIndPhotonEnergy =&fileFirstColumn[0];
-
-    
-
+  
+  
+  
   // --------------------- VitroVex-----------------------------------------		
-    DataFile = "../Detector_construction_files/Refractive_index/Vitrovex_glass.txt";  
+  DataFile = "../Detector_construction_files/Refractive_index/Vitrovex_glass.txt";  
   fileFirstColumn = readColumnDouble(DataFile, 1);
   
   for (unsigned int u = 0; u <fileFirstColumn.size(); u++) {
@@ -644,7 +644,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   
   
   
-    DataFile = "../Detector_construction_files/Abs_length/Vitrovex_glass.txt";         
+  DataFile = "../Detector_construction_files/Abs_length/Vitrovex_glass.txt";         
   fileFirstColumn = readColumnDouble(DataFile, 1);
   fileSecondColumn = readColumnDouble(DataFile, 2);  
   
@@ -654,8 +654,8 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   }
   G4double *VitroVexGlassPhotonEnergy =&fileFirstColumn[0];
   G4double *VitroVexGlassAbsLen = &fileSecondColumn[0];
-
-
+  
+  
   
   // -------------------------- Chiba glass -----------------------------------------------------------
   DataFile = "../Detector_construction_files/Refractive_index/Chiba_glass.txt";  
@@ -677,8 +677,8 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   }
   G4double *ChibaGlassAbsPhotonEnergy =&fileFirstColumn[0];
   G4double *ChibaGlassAbsLen = &fileSecondColumn[0];
-
-
+  
+  
   
   // ------------------------- IceCube glass --------------------------------------------------
   // values taken from DOMINANT simulation code from Chiba
@@ -692,7 +692,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
   }
   G4double *IceCubeGlassPhotonEnergy =&fileFirstColumn[0];
   G4double *IceCubeGlassAbsLen = &fileSecondColumn[0];
-
+  
   
   // --------------------- my VitroVex-----------------------------------------		
   DataFile = "../Detector_construction_files/Abs_length/myVitrovex_glass.txt";
@@ -947,22 +947,22 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
     }
     
   };
-  /*
-   *  proptable_VitrovexGlass->AddConstProperty("SCINTILLATIONYIELD",scintYield);
-   *  proptable_VitrovexGlass->AddConstProperty("FIRSTAMPLITUDE",FirstCompomentAmplitude[tempIndex]);
-   *  proptable_VitrovexGlass->AddConstProperty("SECONDAMPLITUDE",SecondCompomentAmplitude[tempIndex]);
-   *  proptable_VitrovexGlass->AddConstProperty("THIRDAMPLITUDE",ThirdCompomentAmplitude[tempIndex]);
-   *  
-   *  proptable_VitrovexGlass->AddProperty("FIRSTCOMPONENT",Scnt_PP,Scnt_SLOW,32);
-   *  proptable_VitrovexGlass->AddProperty("SECONDCOMPONENT",Scnt_PP,Scnt_SLOW,32);
-   *  proptable_VitrovexGlass->AddProperty("THIRDCOMPONENT",Scnt_PP,Scnt_SLOW,32);
-   *  
-   *  proptable_VitrovexGlass->AddConstProperty("FIRSTTIME",FirstTime[tempIndex]);
-   *  proptable_VitrovexGlass->AddConstProperty("SECONDTIME",SecondTime[tempIndex]);
-   *  proptable_VitrovexGlass->AddConstProperty("THIRDTIME",ThirdTime[tempIndex]);
-   *  
-   *  proptable_VitrovexGlass->AddConstProperty("RESOLUTIONSCALE", 1.0);
-   */
+  
+  proptable_VitrovexGlass->AddConstProperty("SCINTILLATIONYIELD",scintYield);
+  proptable_VitrovexGlass->AddConstProperty("FIRSTAMPLITUDE",FirstCompomentAmplitude[tempIndex]);
+  proptable_VitrovexGlass->AddConstProperty("SECONDAMPLITUDE",SecondCompomentAmplitude[tempIndex]);
+  proptable_VitrovexGlass->AddConstProperty("THIRDAMPLITUDE",ThirdCompomentAmplitude[tempIndex]);
+  
+  proptable_VitrovexGlass->AddProperty("FIRSTCOMPONENT",Scnt_PP,Scnt_SLOW,32);
+  proptable_VitrovexGlass->AddProperty("SECONDCOMPONENT",Scnt_PP,Scnt_SLOW,32);
+  proptable_VitrovexGlass->AddProperty("THIRDCOMPONENT",Scnt_PP,Scnt_SLOW,32);
+  
+  proptable_VitrovexGlass->AddConstProperty("FIRSTTIME",FirstTime[tempIndex]);
+  proptable_VitrovexGlass->AddConstProperty("SECONDTIME",SecondTime[tempIndex]);
+  proptable_VitrovexGlass->AddConstProperty("THIRDTIME",ThirdTime[tempIndex]);
+  
+  proptable_VitrovexGlass->AddConstProperty("RESOLUTIONSCALE", 1.0);
+  
   
   //----------------_Scintillation-----------
   
@@ -2152,7 +2152,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
     //G4VPhysicalVolume* RefCone2_physical = new G4PVPlacement (0, G4ThreeVector(0,0,RefConeDZ+0*CylHigh), RefConeType2_logical, "RefCone_2_physical", myWorldLog, true, 0);
     PMT_physical[0] = new G4PVPlacement (0, G4ThreeVector(0,0,0), PMT_12199_tube_logical, "PMT_0_physical", myWorldLog, true, 0);
     
-    //Glass_physical = new G4PVPlacement (0, G4ThreeVector(0,0,distToPMT+8*mm-zdist+PMTheight), mySampleLog, "Glass_phys", myWorldLog, true, 0);
+    Glass_physical = new G4PVPlacement (0, G4ThreeVector(0,0,distToPMT+8*mm-zdist+PMTheight), mySampleLog, "Glass_phys", myWorldLog, true, 0);
     G4PVPlacement* quelle_physical = new G4PVPlacement (0, G4ThreeVector(0,0,distToPMT+8*mm+0.5*mm+1*mm+PMTheight), quelle_logical, "Quelle_phys", myWorldLog, true, 0);
     G4PVPlacement* ring_physical = new G4PVPlacement (0, G4ThreeVector(0,0,distToPMT+8*mm+0.5*mm+PMTheight), ring_logical, "ring_phys", myWorldLog, true, 0);
     
