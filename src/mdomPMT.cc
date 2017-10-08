@@ -56,7 +56,7 @@ void mdomPMT::loadThePMTInfo(){
   }
   
   else if (gPMT == 0){
-    QEfile = "../QEFiles/Hamamatsu12199-02.cfg";
+    QEfile = "../QEFiles/myPMT-QE.txt";
     G4cout << "Time Response and QE for Hamamatsu 12199" << G4endl;
     TransitTime = 0.0*43*ns;
     TTS =  0.96;
@@ -86,6 +86,7 @@ void mdomPMT::loadThePMTInfo(){
     for (unsigned int u = 0; u <QEwavelenght.size(); u++) {
       QEwavelenght[u] = QEwavelenght.at(u)*nm;
       QEprobability[u] = QEprobability.at(u)/100.;
+
     }
     for (unsigned int u = 0; u <PEtime.size(); u++) {
       PEtime[u] = PEtime.at(u)*ns;

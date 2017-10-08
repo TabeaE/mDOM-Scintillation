@@ -3567,7 +3567,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
 
     
     G4double zdist = 0.968/2.*cm;
-    G4double distToPMT = 3.6*cm-8*mm;
+    G4double distToPMT = 7.3*cm-8*mm;
     G4double PMTheight = (48.)*0.5*mm;
     G4Box* mySample = new G4Box("Glass_phys", 1.5044*cm,1.5044*cm, zdist);
     G4LogicalVolume* mySampleLog = new G4LogicalVolume (mySample, Mat_Vessel_Glass, "single_Glasscorpus logical");
@@ -3577,7 +3577,7 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
     G4LogicalVolume* myWorldLog = new G4LogicalVolume (myWorld, Mat_LabAir, "myairworld");
     G4PVPlacement* myworldphy = new G4PVPlacement (0, G4ThreeVector(0,0,0), myWorldLog, "myworld", World_logical, true, 0);
     
-    G4VPhysicalVolume* RefCone2_physical = new G4PVPlacement (0, G4ThreeVector(0,0,RefConeDZ+0*CylHigh), RefConeType2_logical, "RefCone_2_physical", myWorldLog, true, 0);
+    //G4VPhysicalVolume* RefCone2_physical = new G4PVPlacement (0, G4ThreeVector(0,0,RefConeDZ+0*CylHigh), RefConeType2_logical, "RefCone_2_physical", myWorldLog, true, 0);
     PMT_physical[0] = new G4PVPlacement (0, G4ThreeVector(0,0,0), PMT_12199_tube_logical, "PMT_0_physical", myWorldLog, true, 0);
     
     //Glass_physical = new G4PVPlacement (0, G4ThreeVector(0,0,distToPMT+8*mm-zdist+PMTheight), mySampleLog, "Glass_phys", myWorldLog, true, 0);
@@ -3586,8 +3586,8 @@ G4VPhysicalVolume* mdomDetectorConstruction::Construct() {
     
     G4cout << distToPMT+8*mm+0.5*mm+1*mm+PMTheight << G4endl;
     
-    G4PVPlacement* holder1_physical = new G4PVPlacement (0, G4ThreeVector(0,-1.5044*cm-8*mm,distToPMT+PMTheight), holder1_logical, "holder1_phys", myWorldLog, true, 0);
-    G4PVPlacement* holder2_physical = new G4PVPlacement (0, G4ThreeVector(0,1.5044*cm+8*mm,distToPMT+PMTheight), holder2_logical, "holder2_phys", myWorldLog, true, 0);
+    //G4PVPlacement* holder1_physical = new G4PVPlacement (0, G4ThreeVector(0,-1.5044*cm-8*mm,distToPMT+PMTheight), holder1_logical, "holder1_phys", myWorldLog, true, 0);
+    //G4PVPlacement* holder2_physical = new G4PVPlacement (0, G4ThreeVector(0,1.5044*cm+8*mm,distToPMT+PMTheight), holder2_logical, "holder2_phys", myWorldLog, true, 0);
     
     
     // ------------------- visualisation attributes -------------------------------------------------------------------------------
